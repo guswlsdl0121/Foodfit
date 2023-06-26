@@ -13,7 +13,30 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  security: ## OAuth2 관련 변수
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-id : ${spring.security.oauth2.client.registration.kakao.client-id}
+            client-secret : ${spring.security.oauth2.client.registration.kakao.client-secret}
+            scope:
+              - profile_nickname
+              - account_email
+            client-name: Kakao
+            authorization-grant-type: authorization_code
+            redirect-uri: ${spring.security.oauth2.client.registration.kakao.redirect-uri}
+            client-authentication-method: POST
+        provider:
+          kakao:
+            authorization-uri: ${spring.security.oauth2.client.provider.kakao.authorization-uri}
+            token-uri: ${spring.security.oauth2.client.provider.kakao.token-uri}
+            user-info-uri: ${spring.security.oauth2.client.provider.kakao.user-info}
+            user-name-attribute: id
 
 logging:
   level:
     org.hibernate.SQL: DEBUG
+
+
+
