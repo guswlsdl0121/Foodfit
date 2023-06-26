@@ -25,13 +25,13 @@ spring:
               - account_email
             client-name: Kakao
             authorization-grant-type: authorization_code
+            client-authentication-method: client_secret_post
             redirect-uri: ${spring.security.oauth2.client.registration.kakao.redirect-uri}
-            client-authentication-method: POST
         provider:
           kakao:
             authorization-uri: ${spring.security.oauth2.client.provider.kakao.authorization-uri}
             token-uri: ${spring.security.oauth2.client.provider.kakao.token-uri}
-            user-info-uri: ${spring.security.oauth2.client.provider.kakao.user-info}
+            user-info-uri: ${spring.security.oauth2.client.provider.kakao.user-info-uri}
             user-name-attribute: id
 
 logging:

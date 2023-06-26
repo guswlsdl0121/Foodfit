@@ -35,4 +35,6 @@ public class OAuth2CreationWrapper implements OAuth2User, UserCreateInfo {
     public String getName() {
         return oAuth2User.getName();
     }
+
+
 }
