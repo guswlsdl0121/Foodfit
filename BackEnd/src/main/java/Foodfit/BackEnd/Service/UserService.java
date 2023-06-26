@@ -1,5 +1,6 @@
 package Foodfit.BackEnd.Service;
 
+import Foodfit.BackEnd.Auth.UserCreateInfo;
 import Foodfit.BackEnd.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -13,7 +14,7 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public void addOAuth2User(OAuth2User oAuth2UserInfo){
+    public void addUser(UserCreateInfo userInfo){
 
 
     }

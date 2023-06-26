@@ -21,9 +21,7 @@ public class KakaoUser implements OAuth2User, UserCreateInfo {
         return attributes;
     }
 
-    // 사용 x .. 권한 관련 구현하지 않음
     @Override
-    @Deprecated(forRemoval = true)
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
     }
