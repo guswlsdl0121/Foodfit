@@ -15,7 +15,7 @@ public class User {
     private Long id;
 
     private int age;
-
+    private String name;
     @Enumerated(EnumType.STRING)
     private Gender gender;
 }
