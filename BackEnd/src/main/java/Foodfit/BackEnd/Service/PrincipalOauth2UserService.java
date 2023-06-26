@@ -1,7 +1,6 @@
 package Foodfit.BackEnd.Service;
 
-import Foodfit.BackEnd.Auth.KakaoUserInfo;
-import Foodfit.BackEnd.Auth.OAuth2UserInfo;
+import Foodfit.BackEnd.Auth.KakaoUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -29,7 +28,9 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
             throw new OAuth2AuthenticationException(
                     String.format("invalid oauth2 registration ID : %s", provider));
         }
-        oAuth2UserInfo = new KakaoUserInfo(oAuth2User.getAttributes());
+        oAuth2UserInfo = new KakaoUser(oAuth2User.getAttributes());
+
+        userService.addOAuth2User(oAuth2UserInfo);
 
         return oAuth2UserInfo;
     }
