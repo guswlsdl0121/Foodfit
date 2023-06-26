@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -22,33 +25,42 @@ public class UserFoodService {
     private final FoodRepository foodRepository;
 
     @Transactional
-    public UserFood addUserFood(UserFoodDTO userFoodDTO) {
-        // DTO에서 필요한 정보 가져오기
+    public List<UserFood> addUserFoods(UserFoodDTO userFoodDTO) {
         Long userId = userFoodDTO.userId();
-        Long foodId = userFoodDTO.foodId();
-        double weight = userFoodDTO.weight();
+        List<Long> foodIds = userFoodDTO.foodIds();
+        List<Double> weights = userFoodDTO.weights();
 
         // User 조회
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
 
         // Food 조회
-        Food food = foodRepository.findById(foodId)
-                .orElseThrow(() -> new IllegalArgumentException("Food not found with id: " + foodId));
+        List<Food> foods = foodRepository.findAllById(foodIds);
 
         // 현재 시간
         LocalDateTime date = LocalDateTime.now();
 
-        // UserFood 생성
-        UserFood userFood = UserFood.builder()
-                .user(user)
-                .food(food)
-                .date(date)
-                .weight(weight)
-                .build();
+        // UserFood 생성 및 저장
+        List<UserFood> userFoods = new ArrayList<>();
 
-        // UserFood 저장
-        return userFoodRepository.save(userFood);
+        if (foodIds.size() != weights.size()) {
+            throw new IllegalArgumentException("The number of food IDs and weights should be the same.");
+        }
+
+        for (int i = 0; i < foodIds.size(); i++) {
+            Food food = foods.get(i);
+            double weight = weights.get(i);
+
+            UserFood userFood = UserFood.builder()
+                    .user(user)
+                    .food(food)
+                    .date(date)
+                    .weight(weight)
+                    .build();
+            userFoods.add(userFood);
+        }
+
+        return userFoodRepository.saveAll(userFoods);
     }
 }
 
