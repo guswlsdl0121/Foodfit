@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    volumes:
+      - ./Database/mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: likelion11
+      MYSQL_DATABASE: foodfit
+    ports:
+       - 3306:3306
+volumes:
+  mysql-data:
