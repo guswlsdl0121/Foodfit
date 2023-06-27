@@ -9,6 +9,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -20,6 +21,7 @@ import java.io.IOException;
 // 로그인 성공 후 부가 처리를 하는 클래스
 @RequiredArgsConstructor
 @Component
+@Slf4j
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final JwtTokenProvider jwtTokenProvider;
@@ -36,6 +38,9 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         response.addHeader(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", accessToken));
         response.addCookie(new Cookie("refresh-token", refreshToken));
+
+        //개발 편리성을 위한 log
+        log.info("사용자 Access 토큰 : {} ", accessToken);
 
         getRedirectStrategy().sendRedirect(request, response, "/");
     }

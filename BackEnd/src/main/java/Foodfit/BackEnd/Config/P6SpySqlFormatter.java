@@ -1,4 +1,4 @@
-package Foodfit.BackEnd;
+package Foodfit.BackEnd.Config;
 
 import com.p6spy.engine.logging.Category;
 import com.p6spy.engine.spy.P6SpyOptions;

@@ -41,7 +41,8 @@ dependencies {
 	//스웨거 적용
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.4'
-	//P6spy
+
+//P6spy
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
 }
 
