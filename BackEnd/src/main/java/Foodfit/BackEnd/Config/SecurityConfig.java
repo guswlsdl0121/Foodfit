@@ -23,11 +23,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig{
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final AuthorizationRequestRepository cookieAuthorizationRequestRepository;
 
     private final PrincipalOauth2UserService oauth2UserService;
     private final AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
-    private final AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
@@ -42,11 +41,10 @@ public class SecurityConfig{
                     oauth2Login
                             .authorizationEndpoint(
                                     config->config.baseUri("/oauth2/authorization") // 소셜 로그인 url
-                                        .authorizationRequestRepository(cookieAuthorizationRequestRepository) // 인증 요청을 cookie 에 저장
+
                             )
                             .userInfoEndpoint(config->config.userService(oauth2UserService))
-                            .successHandler(oAuth2AuthenticationSuccessHandler)
-                            .failureHandler(oAuth2AuthenticationFailureHandler);
+                            .successHandler(oAuth2AuthenticationSuccessHandler);
                 })
                 .rememberMe(AbstractHttpConfigurer::disable)  //remember me disable
                 .sessionManagement(sessionManagement->{  //session disable

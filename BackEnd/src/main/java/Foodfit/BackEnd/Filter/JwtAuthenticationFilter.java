@@ -47,7 +47,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         //토큰이 Valid한지 확인하기
-        if(tokenProvider.validateToken(token)){
+        if(!tokenProvider.validateToken(token)){
             filterChain.doFilter(request, response);
             return;
         }
@@ -62,6 +62,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         //디테일 설정하기
         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+
         filterChain.doFilter(request, response);
 
     }

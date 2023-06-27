@@ -2,7 +2,6 @@ package Foodfit.BackEnd.Service;
 
 import Foodfit.BackEnd.Auth.OAuth2UserWrapper;
 import Foodfit.BackEnd.Domain.User;
-import Foodfit.BackEnd.Repository.CookieAuthorizationRequestRepository;
 import Foodfit.BackEnd.Repository.UserRepository;
 import Foodfit.BackEnd.Utils.JwtTokenProvider;
 import jakarta.servlet.ServletException;
@@ -12,7 +11,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
