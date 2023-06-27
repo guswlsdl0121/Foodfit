@@ -31,7 +31,7 @@ public class User {
     private String name;
 
     private int age;
-
+    private String name;
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
