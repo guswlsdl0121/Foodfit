@@ -1,12 +1,12 @@
 package Foodfit.BackEnd.Auth;
 
+import Foodfit.BackEnd.Domain.User;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.Collection;
 import java.util.Map;
 
-public class KakaoUser implements OAuth2User, UserCreateInfo {
+public class KakaoUser implements OAuth2UserWrapper {
     private Map<String, Object> attributes;
     private Map<String, Object> attributesAccount;
     private Map<String, Object> attributesProfile;
@@ -26,11 +26,10 @@ public class KakaoUser implements OAuth2User, UserCreateInfo {
         return null;
     }
 
-    // 사용 x
+
     @Override
-    @Deprecated(forRemoval = true)
     public <A> A getAttribute(String name) {
-        return null;
+        return (A)attributes.get(name);
     }
 
     @Override
@@ -38,9 +37,16 @@ public class KakaoUser implements OAuth2User, UserCreateInfo {
         return attributesProfile.get("nickname").toString();
     }
 
+    @Override
+    public Long getUID() {
+        return Long.parseLong(attributes.get("id").toString());
+    }
 
     @Override
-    public String getUID() {
-        return null;
+    public User toUser() {
+        return User.builder()
+                .name(getName())
+                .uid(getUID())
+                .build();
     }
 }
