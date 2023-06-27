@@ -1,6 +1,8 @@
 package Foodfit.BackEnd.Config;
 
+import Foodfit.BackEnd.Filter.JwtAuthenticationFilter;
 import Foodfit.BackEnd.Service.PrincipalOauth2UserService;
+import Foodfit.BackEnd.Utils.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.context.annotation.Bean;
@@ -20,7 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig{
 
-    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final AuthorizationRequestRepository cookieAuthorizationRequestRepository;
 
     private final PrincipalOauth2UserService oauth2UserService;
@@ -39,7 +41,7 @@ public class SecurityConfig{
                 .oauth2Login(oauth2Login->{
                     oauth2Login
                             .authorizationEndpoint(
-                                    config->config.baseUri("/oauth2/authorize") // 소셜 로그인 url
+                                    config->config.baseUri("/oauth2/authorization") // 소셜 로그인 url
                                         .authorizationRequestRepository(cookieAuthorizationRequestRepository) // 인증 요청을 cookie 에 저장
                             )
                             .userInfoEndpoint(config->config.userService(oauth2UserService))
@@ -51,7 +53,7 @@ public class SecurityConfig{
                     sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
                 })
                 .logout(config->config.clearAuthentication(true).deleteCookies("JSESSIONID")) //logout 설정
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 

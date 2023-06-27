@@ -3,7 +3,7 @@ package Foodfit.BackEnd.Service;
 import Foodfit.BackEnd.Auth.KakaoUser;
 import Foodfit.BackEnd.Auth.OAuth2UserWrapper;
 import Foodfit.BackEnd.Domain.User;
-import Foodfit.BackEnd.repository.UserRepository;
+import Foodfit.BackEnd.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;

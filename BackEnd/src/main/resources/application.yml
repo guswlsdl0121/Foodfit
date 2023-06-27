@@ -40,3 +40,5 @@ logging:
 
 
 
+jwt:
+  secret: ${jwt.secret}

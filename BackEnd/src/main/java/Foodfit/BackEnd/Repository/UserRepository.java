@@ -1,4 +1,4 @@
-package Foodfit.BackEnd.repository;
+package Foodfit.BackEnd.Repository;
 
 import Foodfit.BackEnd.Domain.User;
 import org.springframework.data.repository.CrudRepository;
