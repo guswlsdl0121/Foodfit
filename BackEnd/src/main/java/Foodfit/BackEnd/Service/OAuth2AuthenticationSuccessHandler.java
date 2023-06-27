@@ -38,6 +38,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         response.addHeader(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", accessToken));
         response.addCookie(new Cookie("refresh-token", refreshToken));
-        super.onAuthenticationSuccess(request, response, authentication);
+
+        getRedirectStrategy().sendRedirect(request, response, "/");
     }
 }

@@ -4,6 +4,7 @@ import Foodfit.BackEnd.Domain.User;
 import Foodfit.BackEnd.Repository.UserRepository;
 import io.jsonwebtoken.*;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +24,11 @@ public class JwtTokenProvider {
     private final Long ACCESS_TOKEN_EXPIRE_TIME = 30 * 60 * 1000L;
     private final Long REFRESH_TOKEN_EXPIRE_TIME = 60 * 60 * 24 * 14 * 1000L;
 
+    @PostConstruct
+    protected void init() {
+        secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
+    }
+
     /**
      * methodName : generateRefreshToken
      * author : Jaeyeop Jung
@@ -33,11 +39,11 @@ public class JwtTokenProvider {
      */
     public String generateRefreshToken(User user){
         Date now = new Date();
-
+        Claims claims = Jwts.claims().setSubject(user.getId().toString());
         return Jwts.builder()
                 .setHeaderParam("typ", "REFRESH_TOKEN")
                 .setHeaderParam("alg", "HS256")
-                .setSubject(user.getId().toString())
+                .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + REFRESH_TOKEN_EXPIRE_TIME))
                 .signWith(SignatureAlgorithm.HS256, secretKey)
@@ -61,7 +67,7 @@ public class JwtTokenProvider {
                 .setSubject(user.getId().toString())
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + ACCESS_TOKEN_EXPIRE_TIME))
-                .signWith(SignatureAlgorithm.HS256, Base64.getEncoder().encodeToString(secretKey.getBytes()))
+                .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }
 
