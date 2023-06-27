@@ -3,22 +3,29 @@ package Foodfit.BackEnd.Config;
 import Foodfit.BackEnd.Service.PrincipalOauth2UserService;
 import lombok.RequiredArgsConstructor;
 
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-
-
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig{
 
+    private final JwtTokenProvider jwtTokenProvider;
+    private final AuthorizationRequestRepository cookieAuthorizationRequestRepository;
 
     private final PrincipalOauth2UserService oauth2UserService;
+    private final AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+    private final AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
@@ -30,14 +37,21 @@ public class SecurityConfig{
 
                 })
                 .oauth2Login(oauth2Login->{
-                    oauth2Login.loginPage("/loginForm")
-                            .defaultSuccessUrl("/")
-                            .failureUrl("/loginForm")
-                            .userInfoEndpoint(oAuth2LoginConfigurer->{
-                                oAuth2LoginConfigurer.userService(oauth2UserService);
-                            });
-
+                    oauth2Login
+                            .authorizationEndpoint(
+                                    config->config.baseUri("/oauth2/authorize") // 소셜 로그인 url
+                                        .authorizationRequestRepository(cookieAuthorizationRequestRepository) // 인증 요청을 cookie 에 저장
+                            )
+                            .userInfoEndpoint(config->config.userService(oauth2UserService))
+                            .successHandler(oAuth2AuthenticationSuccessHandler)
+                            .failureHandler(oAuth2AuthenticationFailureHandler);
                 })
+                .rememberMe(AbstractHttpConfigurer::disable)  //remember me disable
+                .sessionManagement(sessionManagement->{  //session disable
+                    sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                })
+                .logout(config->config.clearAuthentication(true).deleteCookies("JSESSIONID")) //logout 설정
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
