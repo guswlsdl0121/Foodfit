@@ -1,8 +1,6 @@
 package Foodfit.BackEnd.Controller;
 
 import Foodfit.BackEnd.DTO.UserFoodDTO;
-import Foodfit.BackEnd.Domain.Food;
-import Foodfit.BackEnd.Domain.User;
 import Foodfit.BackEnd.Domain.UserFood;
 import Foodfit.BackEnd.Service.UserFoodService;
 import lombok.RequiredArgsConstructor;

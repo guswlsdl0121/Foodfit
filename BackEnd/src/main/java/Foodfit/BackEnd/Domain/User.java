@@ -27,11 +27,11 @@ public class User {
     @Column(name = "user_id")
     private Long id;
 
-    @Column(name = "user_name", nullable = false)
+    @Column(nullable = false)
     private String name;
 
     private int age;
-    private String name;
+
     @Enumerated(EnumType.STRING)
     private Gender gender;
 

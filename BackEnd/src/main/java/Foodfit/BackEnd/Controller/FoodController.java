@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api-foods")
+@RequestMapping("/api")
 public class FoodController {
 
     private final FoodService foodService;
@@ -19,7 +19,7 @@ public class FoodController {
         this.foodService = foodService;
     }
 
-    @GetMapping("/search")
+    @GetMapping("/food-search")
     public List<Food> searchFoods(@RequestParam("name") String name) {
         return foodService.searchFoods(name);
     }
