@@ -10,5 +10,15 @@ services:
       MYSQL_DATABASE: foodfit
     ports:
        - 3307:3306
+  nginx:
+    build:
+      context: .
+      dockerfile: ./Frontend/Dockerfile
+    ports:
+      - 80:80
+    volumes:
+      - ./Frontend/build:/app/build
+      - ./Frontend/nginx.conf:/etc/nginx/conf.d/nginx.conf
+    command: nginx -g 'daemon off;'
 volumes:
   mysql-data:
