@@ -6,33 +6,35 @@ import Foodfit.BackEnd.Domain.User;
 import Foodfit.BackEnd.Domain.UserFood;
 import Foodfit.BackEnd.Repository.FoodRepository;
 import Foodfit.BackEnd.Repository.UserFoodRepository;
-import Foodfit.BackEnd.Repository.UserRepository;
+import Foodfit.BackEnd.Utils.UserProvider;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class UserFoodService {
     private final UserFoodRepository userFoodRepository;
-    private final UserRepository userRepository;
     private final FoodRepository foodRepository;
+    private final UserProvider userProvider;
 
     @Transactional
     public List<UserFood> addUserFoods(UserFoodDTO userFoodDTO) {
-        Long userId = userFoodDTO.userId();
         List<Long> foodIds = userFoodDTO.foodIds();
         List<Double> weights = userFoodDTO.weights();
+        User user = userProvider.getUser()
+                .orElseThrow(() -> new NoSuchElementException("사용자가 없습니다."));
 
-        // User 조회
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
+        log.info("사용자 pk : {}", user.getId());
 
         // Food 조회
         List<Food> foods = foodRepository.findAllById(foodIds);
@@ -44,7 +46,7 @@ public class UserFoodService {
         List<UserFood> userFoods = new ArrayList<>();
 
         if (foodIds.size() != weights.size()) {
-            throw new IllegalArgumentException("The number of food IDs and weights should be the same.");
+            throw new IllegalArgumentException("food의 개수와 weight의 개수가 같아야 합니다.");
         }
 
         for (int i = 0; i < foodIds.size(); i++) {

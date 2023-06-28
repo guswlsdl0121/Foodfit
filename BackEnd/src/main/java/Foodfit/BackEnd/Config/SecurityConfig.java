@@ -33,6 +33,8 @@ public class SecurityConfig{
                 .csrf((csrf)->csrf.disable())
                 .authorizeHttpRequests((authorizeHttpRequest)->{
                     authorizeHttpRequest
+                            .requestMatchers("/api/health-check").authenticated()
+                            .requestMatchers("/api/login/**").permitAll()
                             //.requestMatchers("/api/**").authenticated()
                             .anyRequest().permitAll(); // 실사용시에 위 코드로 변경 필요
 
@@ -51,7 +53,7 @@ public class SecurityConfig{
                     sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
                 })
                 .logout(config->config.clearAuthentication(true).deleteCookies("JSESSIONID")) //logout 설정
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 

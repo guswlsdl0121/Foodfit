@@ -6,13 +6,13 @@ spring:
     username: ${spring.datasource.username}
     password: ${spring.datasource.password}
 
-
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
+    open-in-view: false
 
   security: ## OAuth2 관련 변수
     oauth2:
@@ -35,7 +35,6 @@ spring:
             user-info-uri: ${spring.security.oauth2.client.provider.kakao.user-info-uri}
             user-name-attribute: id
 
-    open-in-view: false
 
 logging:
   level:

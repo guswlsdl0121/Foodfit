@@ -44,9 +44,11 @@ public class KakaoUser implements OAuth2UserWrapper {
 
     @Override
     public User toUser() {
+        byte[] profileImageUrls = attributesProfile.get("profile_image_url").toString().getBytes();
         return User.builder()
                 .name(getName())
                 .uid(getUID())
+                .profileImage(profileImageUrls)
                 .build();
     }
 }
