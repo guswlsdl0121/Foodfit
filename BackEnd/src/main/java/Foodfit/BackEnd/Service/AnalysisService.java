@@ -2,8 +2,10 @@ package Foodfit.BackEnd.Service;
 
 import Foodfit.BackEnd.DTO.DailyAnalysisDTO;
 import Foodfit.BackEnd.Domain.Food;
+import Foodfit.BackEnd.Domain.User;
 import Foodfit.BackEnd.Domain.UserFood;
 import Foodfit.BackEnd.Repository.UserFoodRepository;
+import Foodfit.BackEnd.Utils.UserProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +15,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 
@@ -21,12 +24,17 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class AnalysisService {
     private final UserFoodRepository userFoodRepository;
+    private final UserProvider userProvider;
 
-    public DailyAnalysisDTO makeDailyAnalysis(Long user_id){
+    public DailyAnalysisDTO makeDailyAnalysis(){
         // 현재시간
         LocalDate today = LocalDate.now();
         LocalDateTime todayStart = LocalDateTime.of(today, LocalTime.MIN);
         LocalDateTime todayEnd = LocalDateTime.of(today, LocalTime.MAX);
+
+        User user = userProvider.getUser()
+                .orElseThrow(() -> new NoSuchElementException("사용자가 없습니다."));
+        Long user_id = user.getId();
 
         // UserFood 조회
         List<UserFood> userFoods = Optional.ofNullable(userFoodRepository.findAllByUserIdAndDateBetween(user_id, todayStart, todayEnd))
