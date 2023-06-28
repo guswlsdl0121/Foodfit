@@ -44,7 +44,6 @@ public class UserCheckAspect {
         User user = userProvider.getUser().orElseThrow(()->new NoSuchElementException("유저 정보를 찾을 수 없습니다."));
 
         userProvider.verifyIsFieldNotNull(user,  UserProvider.UserFields.age, UserProvider.UserFields.gender);
-
         // 해당 클래스의 메소드 실행
         Object result = pjp.proceed();
 
