@@ -1,10 +1,8 @@
 package Foodfit.BackEnd.Utils;
 
 import Foodfit.BackEnd.Domain.User;
-import Foodfit.BackEnd.Repository.UserRepository;
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.aspectj.util.Reflection;
+import Foodfit.BackEnd.Exception.NullFieldException;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -62,7 +60,7 @@ public class UserProvider {
             Object actual = field.get(user); // 해당 필드의 user의 값을 받아옴.
             field.setAccessible(preAccess);
 
-            if(isZeroValue(actual)) throw new NoSuchFieldException(String.format("%s 필드가 빈 값입니다.", fieldName.name()));
+            if(isZeroValue(actual)) throw new NullFieldException(String.format("%s 필드가 빈 값입니다.", fieldName.name()));
         }
     }
 
