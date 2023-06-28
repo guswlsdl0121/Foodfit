@@ -51,7 +51,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if(authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")){
             filterChain.doFilter(request, response);
             return;
-            //throw new UnAuthorizedException(AuthorizeExceptionMessages.UNAVAILABLE_TOKEN.MESSAGE);
         }
 
         // 토큰 분리

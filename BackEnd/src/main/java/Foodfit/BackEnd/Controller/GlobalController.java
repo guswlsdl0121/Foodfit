@@ -19,7 +19,6 @@ public class GlobalController {
     @AdditionalUserInfoCheck
     public String healthCheck(HttpServletRequest req){
         User user = (User)req.getAttribute("user");
-
         return "Server is Running!";
     }
 
