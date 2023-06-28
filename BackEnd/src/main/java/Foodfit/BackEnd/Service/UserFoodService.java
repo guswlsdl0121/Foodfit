@@ -25,7 +25,6 @@ import java.util.NoSuchElementException;
 public class UserFoodService {
     private final UserFoodRepository userFoodRepository;
     private final FoodRepository foodRepository;
-    private final UserProvider userProvider;
 
     @Transactional
     public List<UserFood> addUserFoods(UserFoodDTO userFoodDTO, User user) {
