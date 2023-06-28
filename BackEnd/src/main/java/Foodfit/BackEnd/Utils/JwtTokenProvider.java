@@ -29,6 +29,13 @@ public class JwtTokenProvider {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
+
+    public Claims getClaim(String token){
+        return Jwts.parser()
+                .setSigningKey(secretKey)
+                .parseClaimsJws(token)
+                .getBody();
+    }
     /**
      * methodName : generateRefreshToken
      * author : Jaeyeop Jung

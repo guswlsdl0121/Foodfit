@@ -34,6 +34,7 @@ public class SecurityConfig{
                 .authorizeHttpRequests((authorizeHttpRequest)->{
                     authorizeHttpRequest
                             //.requestMatchers("/api/**").authenticated()
+                            .requestMatchers("/api/health-check").authenticated()
                             .anyRequest().permitAll(); // 실사용시에 위 코드로 변경 필요
 
                 })
