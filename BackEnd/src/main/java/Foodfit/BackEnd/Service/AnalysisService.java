@@ -1,11 +1,11 @@
 package Foodfit.BackEnd.Service;
 
 import Foodfit.BackEnd.DTO.DailyAnalysisDTO;
+import Foodfit.BackEnd.DTO.PeriodAnalysisDTO;
 import Foodfit.BackEnd.Domain.Food;
 import Foodfit.BackEnd.Domain.User;
 import Foodfit.BackEnd.Domain.UserFood;
 import Foodfit.BackEnd.Repository.UserFoodRepository;
-import Foodfit.BackEnd.Utils.UserProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,10 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 
 @Service
@@ -25,16 +22,14 @@ import java.util.Optional;
 public class AnalysisService {
     private final UserFoodRepository userFoodRepository;
 
-    public DailyAnalysisDTO makeDailyAnalysis(User user){
+    public DailyAnalysisDTO getDailyAnalysis(User user){
         // 현재시간
         LocalDate today = LocalDate.now();
         LocalDateTime todayStart = LocalDateTime.of(today, LocalTime.MIN);
         LocalDateTime todayEnd = LocalDateTime.of(today, LocalTime.MAX);
 
-        Long user_id = user.getId();
-
         // UserFood 조회
-        List<UserFood> userFoods = Optional.ofNullable(userFoodRepository.findAllByUserIdAndDateBetween(user_id, todayStart, todayEnd))
+        List<UserFood> userFoods = Optional.ofNullable(userFoodRepository.findByUserAndDateBetween(user, todayStart, todayEnd))
                 .orElse(new ArrayList<>());
 
         // 영양소
@@ -51,11 +46,42 @@ public class AnalysisService {
             totalProtein += Math.round(food.getProtein()*weightRatio);
             totalFat += Math.round(food.getFat()*weightRatio);
             totalSalt += Math.round(food.getSalt()*weightRatio);
-
         }
-
         return new DailyAnalysisDTO(totalCalorie, totalProtein, totalFat, totalSalt);
-
     }
 
+    public List<PeriodAnalysisDTO> getPeriodAnalysis(User user, LocalDate startDate, LocalDate endDate, String nutrient) {
+        List<UserFood> userFoods = userFoodRepository.findByUserAndDateBetween(user, startDate.atStartOfDay(), endDate.atTime(LocalTime.MAX));
+        Map<LocalDate, Double> nutrientMap = new HashMap<>();
+
+        for (UserFood userFood : userFoods) {
+            LocalDate date = userFood.getDate().toLocalDate();
+            double nutrientAmount = getDayAmount(userFood, nutrient);
+            nutrientMap.put(date, nutrientMap.getOrDefault(date, 0.0) + nutrientAmount);
+        }
+
+        List<PeriodAnalysisDTO> nutrientList = new ArrayList<>();
+
+        for (Map.Entry<LocalDate, Double> entry : nutrientMap.entrySet()) {
+            LocalDate date = entry.getKey();
+            Double nutrientAmount = entry.getValue();
+            PeriodAnalysisDTO dto = new PeriodAnalysisDTO(date, nutrientAmount);
+            nutrientList.add(dto);
+        }
+
+        return nutrientList;
+    }
+
+    private double getDayAmount(UserFood userFood, String nutrient) {
+        Food food = userFood.getFood();
+        double weightRatio = userFood.getWeight() / 100;
+
+        return switch (nutrient) {
+            case "protein" -> food.getProtein() * weightRatio;
+            case "fat" -> food.getFat() * weightRatio;
+            case "salt" -> food.getSalt() * weightRatio;
+            // Handle other nutrients accordingly
+            default -> throw new IllegalArgumentException("Invalid nutrient type: " + nutrient);
+        };
+    }
 }
