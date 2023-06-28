@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/api")
 public class UserController {
     @GetMapping("/login/kakao")
-    public String getUserLoginForm() {
+    public String getUser() {
         return "redirect:/oauth2/authorization/kakao";
     }
 }

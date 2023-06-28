@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Slf4j
 public class GlobalController {
-
     @GetMapping("/health-check")
     @AdditionalUserInfoCheck
     public String healthCheck(HttpServletRequest req){
         User user = (User)req.getAttribute("user");
+        log.info("userID = {}", user.getId());
         return "Server is Running!";
     }
 
