@@ -62,12 +62,12 @@ public class UserProvider {
             Object actual = field.get(user); // 해당 필드의 user의 값을 받아옴.
             field.setAccessible(preAccess);
 
-            if() throw new NoSuchFieldException(String.format("%s 필드가 빈 값입니다.", actual.toString()));
+            if(isZeroValue(actual)) throw new NoSuchFieldException(String.format("%s 필드가 빈 값입니다.", fieldName.name()));
         }
     }
 
     private boolean isZeroValue(Object value){
-        (value == null) || (value instanceof Number && value.equals(0));
+        return (value == null) || (value instanceof Number && value.equals(0));
     }
     public  enum UserFields{
         id, name, age, gender, uid;
