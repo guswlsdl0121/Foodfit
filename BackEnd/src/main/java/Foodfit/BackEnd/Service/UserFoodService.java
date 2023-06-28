@@ -31,7 +31,7 @@ public class UserFoodService {
     public List<UserFood> addUserFoods(UserFoodDTO userFoodDTO) {
         List<Long> foodIds = userFoodDTO.foodIds();
         List<Double> weights = userFoodDTO.weights();
-        User user = userProvider.getUserFromSecurityContext()
+        User user = userProvider.getUser()
                 .orElseThrow(() -> new NoSuchElementException("사용자가 없습니다."));
 
         log.info("사용자 pk : {}", user.getId());

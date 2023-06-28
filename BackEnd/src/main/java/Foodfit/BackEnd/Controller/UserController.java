@@ -2,11 +2,12 @@ package Foodfit.BackEnd.Controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-//수정 : 바로 redirect하도록 만듦
 @Controller
+@RequestMapping("/api")
 public class UserController {
-    @GetMapping("/kakao-login")
+    @GetMapping("/login/kakao")
     public String getUserLoginForm() {
         return "redirect:/oauth2/authorization/kakao";
     }
