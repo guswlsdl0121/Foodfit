@@ -26,4 +26,3 @@ public class UserFoodController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userFoods);
     }
 }
-
