@@ -28,11 +28,11 @@ public class UserFoodService {
     private final UserProvider userProvider;
 
     @Transactional
-    public List<UserFood> addUserFoods(UserFoodDTO userFoodDTO) {
+    public List<UserFood> addUserFoods(UserFoodDTO userFoodDTO, User user) {
         List<Long> foodIds = userFoodDTO.foodIds();
         List<Double> weights = userFoodDTO.weights();
-        User user = userProvider.getUser()
-                .orElseThrow(() -> new NoSuchElementException("사용자가 없습니다."));
+        log.info("foodids = {}", foodIds);
+        log.info("weight = {}", weights);
 
         log.info("사용자 pk : {}", user.getId());
 

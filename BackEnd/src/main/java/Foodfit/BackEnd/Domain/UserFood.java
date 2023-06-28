@@ -18,11 +18,11 @@ public class UserFood {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "food_id")
+    @JoinColumn(name = "food_id", referencedColumnName = "food_id")
     private Food food;
 
     @Temporal(TemporalType.TIMESTAMP)

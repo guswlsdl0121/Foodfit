@@ -24,16 +24,13 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class AnalysisService {
     private final UserFoodRepository userFoodRepository;
-    private final UserProvider userProvider;
 
-    public DailyAnalysisDTO makeDailyAnalysis(){
+    public DailyAnalysisDTO makeDailyAnalysis(User user){
         // 현재시간
         LocalDate today = LocalDate.now();
         LocalDateTime todayStart = LocalDateTime.of(today, LocalTime.MIN);
         LocalDateTime todayEnd = LocalDateTime.of(today, LocalTime.MAX);
 
-        User user = userProvider.getUser()
-                .orElseThrow(() -> new NoSuchElementException("사용자가 없습니다."));
         Long user_id = user.getId();
 
         // UserFood 조회

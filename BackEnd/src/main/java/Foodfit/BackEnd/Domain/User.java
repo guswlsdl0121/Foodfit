@@ -41,10 +41,15 @@ public class User {
 
 
     @Lob
+    @Column(nullable = true)
     private byte[] profileImage;
 
-    public String getProfileImage() {
-        return new String(profileImage);
+    public byte[] getProfileImage() {
+        if (profileImage != null) {
+            return profileImage;
+        } else {
+            return new byte[0]; // 또는 null 값을 대체할 다른 기본값을 반환할 수도 있습니다.
+        }
     }
 }
 

@@ -21,8 +21,10 @@ public class UserFoodController {
     private final UserFoodService userFoodService;
 
     @PostMapping
-    public ResponseEntity<List<UserFood>> addUserFood(@RequestBody UserFoodDTO userFoodDTO) {
-        List<UserFood> userFoods = userFoodService.addUserFoods(userFoodDTO);
+    @AdditionalUserInfoCheck
+    public ResponseEntity<List<UserFood>> addUserFood(HttpServletRequest request, @RequestBody UserFoodDTO userFoodDTO) {
+        User user = (User)request.getAttribute("user");
+        List<UserFood> userFoods = userFoodService.addUserFoods(userFoodDTO, user);
         return ResponseEntity.status(HttpStatus.CREATED).body(userFoods);
     }
 }
