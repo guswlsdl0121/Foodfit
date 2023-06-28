@@ -21,17 +21,7 @@ public class UserCheckAspect {
 
     @Around("@annotation(Foodfit.BackEnd.Aop.Annotations.LoginCheck)")
     public Object LoginCheck(ProceedingJoinPoint pjp) throws Throwable {
-        for (Object obj : pjp.getArgs()) {
-            if (!(obj instanceof HttpServletRequest)) {
-                continue;
-            }
-            HttpServletRequest request = (HttpServletRequest) obj;
-            User user = userProvider.getUser().orElseThrow(()->new NoSuchElementException("유저 정보를 찾을 수 없습니다."));
-            request.setAttribute("user", user);
-
-            break;
-
-        }
+        addUserInRequest(pjp);
 
         // 해당 클래스의 메소드 실행
         Object result = pjp.proceed();
@@ -44,11 +34,25 @@ public class UserCheckAspect {
         User user = userProvider.getUser().orElseThrow(()->new NoSuchElementException("유저 정보를 찾을 수 없습니다."));
 
         userProvider.verifyIsFieldNotNull(user,  UserProvider.UserFields.age, UserProvider.UserFields.gender);
+
+        addUserInRequest(pjp);
         // 해당 클래스의 메소드 실행
         Object result = pjp.proceed();
 
         return result;
     }
 
+    private void addUserInRequest(ProceedingJoinPoint pjp) {
+        for (Object obj : pjp.getArgs()) {
+            if (!(obj instanceof HttpServletRequest)) {
+                continue;
+            }
+            HttpServletRequest request = (HttpServletRequest) obj;
+            User user = userProvider.getUser().orElseThrow(()->new NoSuchElementException("유저 정보를 찾을 수 없습니다."));
+            request.setAttribute("user", user);
 
+            break;
+
+        }
+    }
 }
