@@ -42,6 +42,7 @@ public class KakaoUser implements OAuth2UserWrapper {
         return Long.parseLong(attributes.get("id").toString());
     }
 
+    //이미지 URL 관련 NULL처리
     @Override
     public User toUser() {
         Object profileImageUrlObject = attributesProfile.get("profile_image_url");
