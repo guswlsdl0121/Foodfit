@@ -2,7 +2,6 @@ package Foodfit.BackEnd.Aop;
 
 
 import Foodfit.BackEnd.Domain.User;
-import Foodfit.BackEnd.Exception.NoUserFoundException;
 import Foodfit.BackEnd.Utils.UserProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +9,8 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
+
+import java.util.NoSuchElementException;
 
 @Aspect
 @Component
@@ -25,7 +26,7 @@ public class UserCheckAspect {
                 continue;
             }
             HttpServletRequest request = (HttpServletRequest) obj;
-            User user = userProvider.getUser().orElseThrow(NoUserFoundException::new);
+            User user = userProvider.getUser().orElseThrow(()->new NoSuchElementException("유저 정보를 찾을 수 없습니다."));
             request.setAttribute("user", user);
 
             break;
@@ -40,9 +41,9 @@ public class UserCheckAspect {
 
     @Around("@annotation(Foodfit.BackEnd.Aop.Annotations.AdditionalUserInfoCheck)")
     public Object additionalUserInfoCheck(ProceedingJoinPoint pjp) throws Throwable {
-        User user = userProvider.getUser().orElseThrow(NoUserFoundException::new);
+        User user = userProvider.getUser().orElseThrow(()->new NoSuchElementException("유저 정보를 찾을 수 없습니다."));
 
-        userProvider.verifyIsFieldNotNull(user, UserProvider.UserFields.gender, UserProvider.UserFields.age);
+        userProvider.verifyIsFieldNotNull(user,  UserProvider.UserFields.age, UserProvider.UserFields.gender);
 
         // 해당 클래스의 메소드 실행
         Object result = pjp.proceed();

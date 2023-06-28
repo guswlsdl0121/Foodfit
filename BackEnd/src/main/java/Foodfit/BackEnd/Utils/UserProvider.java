@@ -49,12 +49,12 @@ public class UserProvider {
      * @param userEntity(User), fieldNames(String ...)
      * @return 모두 not null이라면 true, 하나라도 null인 필드가 있다면 false
      */
-    public boolean verifyIsFieldNotNull(User user, UserFields ... fieldNames) throws NoSuchFieldException, IllegalAccessException {
+    public void verifyIsFieldNotNull(User user, UserFields ... fieldNames) throws NoSuchFieldException, IllegalAccessException {
         // Java Reflection을 사용해 테스트 진행
         Class<? extends User> userClass = user.getClass();
 
         for(UserFields fieldName : fieldNames){
-            Field field = userClass.getField(fieldName.name());
+            Field field = userClass.getDeclaredField(fieldName.name());
 
             boolean preAccess = field.canAccess(user); //접근 제한을 다시 원래대로 돌리기 위해 백업
             field.setAccessible(true);
@@ -62,12 +62,13 @@ public class UserProvider {
             Object actual = field.get(user); // 해당 필드의 user의 값을 받아옴.
             field.setAccessible(preAccess);
 
-            if(actual == null) return false;
+            if() throw new NoSuchFieldException(String.format("%s 필드가 빈 값입니다.", actual.toString()));
         }
-        return true;
     }
 
-
+    private boolean isZeroValue(Object value){
+        (value == null) || (value instanceof Number && value.equals(0));
+    }
     public  enum UserFields{
         id, name, age, gender, uid;
     }

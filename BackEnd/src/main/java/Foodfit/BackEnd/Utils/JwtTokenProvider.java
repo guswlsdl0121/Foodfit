@@ -1,6 +1,8 @@
 package Foodfit.BackEnd.Utils;
 
 import Foodfit.BackEnd.Domain.User;
+import Foodfit.BackEnd.Exception.AuthorizeExceptionMessages;
+import Foodfit.BackEnd.Exception.UnAuthorizedException;
 import Foodfit.BackEnd.Repository.UserRepository;
 import io.jsonwebtoken.*;
 
@@ -15,7 +17,6 @@ import java.util.Date;
 
 @RequiredArgsConstructor
 @Component
-@Slf4j
 public class JwtTokenProvider {
 
     @Value("${jwt.secret}")
@@ -104,24 +105,19 @@ public class JwtTokenProvider {
      * @param token Jwt Token
      * @return 검증 결과
      */
-    public boolean validateToken(String token){
+    public void validateToken(String token){
         try {
             Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
-            return true;
-        } catch (SignatureException ex) {
-            log.error("Invalid JWT signature");
-        } catch (MalformedJwtException ex) {
-            log.error("Invalid JWT token");
-        } catch (ExpiredJwtException ex) {
-            log.error("Expired JWT token");
-        } catch (UnsupportedJwtException ex) {
-            log.error("Unsupported JWT token");
-        } catch (IllegalArgumentException ex) {
-            log.error("JWT claims string is empty.");
-        } catch (NullPointerException ex){
-            log.error("JWT RefreshToken is empty");
+        } catch (SignatureException | MalformedJwtException e) {
+            throw new UnAuthorizedException(AuthorizeExceptionMessages.INVALID_JWT_SIGNATURE.MESSAGE, e);
         }
-        return false;
+        catch (ExpiredJwtException e) {
+            throw new UnAuthorizedException(AuthorizeExceptionMessages.EXPIRED_JWT.MESSAGE);
+        } catch (UnsupportedJwtException e) {
+            throw new UnAuthorizedException(AuthorizeExceptionMessages.UNSUPPORTED_JWT.MESSAGE);
+        } catch (IllegalArgumentException | NullPointerException e) {
+            throw new UnAuthorizedException(AuthorizeExceptionMessages.UNAVAILABLE_TOKEN.MESSAGE);
+        }
     }
 
 
