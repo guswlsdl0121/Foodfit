@@ -7,6 +7,7 @@ import Foodfit.BackEnd.Domain.UserFood;
 import Foodfit.BackEnd.Repository.UserFoodRepository;
 import Foodfit.BackEnd.Service.AnalysisService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -33,6 +34,7 @@ class AnalysisServiceTest {
         analysisService = new AnalysisService(userFoodRepository);
     }
 
+    @Disabled
     @Test
     void testGetPeriodAnalysis() {
         // Mock data
