@@ -34,7 +34,7 @@ public class SecurityConfig{
                 .authorizeHttpRequests((authorizeHttpRequest)->{
                     authorizeHttpRequest
                             .requestMatchers("/api/health-check").authenticated()
-                            .requestMatchers("/api/login/**").permitAll()
+                            .requestMatchers("/api/login/**", "/api/swagger", "/swagger-ui/**", "/v3/**").permitAll()
                             //.requestMatchers("/api/**").authenticated()
                             .anyRequest().permitAll(); // 실사용시에 위 코드로 변경 필요
 
