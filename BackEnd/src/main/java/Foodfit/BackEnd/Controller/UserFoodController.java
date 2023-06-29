@@ -27,4 +27,6 @@ public class UserFoodController {
         List<UserFood> userFoods = userFoodService.addUserFoods(userFoodDTO, user);
         return ResponseEntity.status(HttpStatus.CREATED).body(userFoods);
     }
+
+
 }
