@@ -102,6 +102,7 @@ public class AnalysisService {
             case "protein" -> food.getProtein() * weightRatio;
             case "fat" -> food.getFat() * weightRatio;
             case "salt" -> food.getSalt() * weightRatio;
+            case "caloroie" -> food.getCalorie() * weightRatio;
             // Handle other nutrients accordingly
             default -> throw new IllegalArgumentException("Invalid nutrient type: " + nutrient);
         };

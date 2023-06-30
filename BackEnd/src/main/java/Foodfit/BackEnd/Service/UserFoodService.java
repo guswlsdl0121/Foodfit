@@ -1,14 +1,13 @@
 package Foodfit.BackEnd.Service;
 
+import Foodfit.BackEnd.DTO.Request.UserFoodDTO;
 import Foodfit.BackEnd.DTO.UserDTO;
-import Foodfit.BackEnd.DTO.UserFoodDTO;
 import Foodfit.BackEnd.Domain.Food;
 import Foodfit.BackEnd.Domain.User;
 import Foodfit.BackEnd.Domain.UserFood;
 import Foodfit.BackEnd.Repository.FoodRepository;
 import Foodfit.BackEnd.Repository.UserFoodRepository;
 import Foodfit.BackEnd.Repository.UserRepository;
-import io.github.classgraph.FieldInfoList;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -33,15 +32,13 @@ public class UserFoodService {
      * methodName : addUserFoods
      * author : guswlsdl
      * description : 사용자가 먹은 음식을 테이블에 추가한다.
-     * @param  userFoodDTO, user
+     * @param  foodIds, weights, userDTO
      * @return 없음
      */
     @Transactional
-    public List<UserFood> addUserFoods(UserFoodDTO userFoodDTO, UserDTO userDTO) {
-        List<Long> foodIds = userFoodDTO.foodIds();
-        List<Double> weights = userFoodDTO.weights();
-        log.info("foodids = {}", foodIds);
-        log.info("weight = {}", weights);
+    public List<UserFood> addUserFoods(List<Long> foodIds, List<Double> weights, UserDTO userDTO) {
+        log.info("foodIds = {}", foodIds);
+        log.info("weights = {}", weights);
 
         User user = userRepository.findById(userDTO.getId()).orElseThrow(NoSuchElementException::new);
         // Food 조회
