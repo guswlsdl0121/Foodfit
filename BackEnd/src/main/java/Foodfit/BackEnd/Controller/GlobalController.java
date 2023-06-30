@@ -2,8 +2,7 @@ package Foodfit.BackEnd.Controller;
 
 
 import Foodfit.BackEnd.Aop.Annotations.AdditionalUserInfoCheck;
-import Foodfit.BackEnd.Aop.Annotations.LoginCheck;
-import Foodfit.BackEnd.Domain.User;
+import Foodfit.BackEnd.DTO.UserDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +19,7 @@ public class GlobalController {
     @GetMapping("/health-check")
     @AdditionalUserInfoCheck
     public String healthCheck(HttpServletRequest req){
-        User user = (User)req.getAttribute("user");
+        UserDTO user = (UserDTO) req.getAttribute("user");
         log.info("userID = {}", user.getId());
         return "Server is Running!";
     }

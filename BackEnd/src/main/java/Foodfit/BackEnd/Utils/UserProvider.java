@@ -1,7 +1,6 @@
 package Foodfit.BackEnd.Utils;
 
 import Foodfit.BackEnd.DTO.UserDTO;
-import Foodfit.BackEnd.Domain.User;
 import Foodfit.BackEnd.Exception.NullFieldException;
 
 import org.springframework.security.core.Authentication;

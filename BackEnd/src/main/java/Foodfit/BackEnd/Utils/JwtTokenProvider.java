@@ -3,12 +3,10 @@ package Foodfit.BackEnd.Utils;
 import Foodfit.BackEnd.Domain.User;
 import Foodfit.BackEnd.Exception.AuthorizeExceptionMessages;
 import Foodfit.BackEnd.Exception.UnAuthorizedException;
-import Foodfit.BackEnd.Repository.UserRepository;
 import io.jsonwebtoken.*;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 

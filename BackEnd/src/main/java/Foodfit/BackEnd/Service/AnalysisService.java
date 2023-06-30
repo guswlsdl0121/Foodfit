@@ -2,10 +2,12 @@ package Foodfit.BackEnd.Service;
 
 import Foodfit.BackEnd.DTO.DailyAnalysisDTO;
 import Foodfit.BackEnd.DTO.PeriodAnalysisDTO;
+import Foodfit.BackEnd.DTO.UserDTO;
 import Foodfit.BackEnd.Domain.Food;
 import Foodfit.BackEnd.Domain.User;
 import Foodfit.BackEnd.Domain.UserFood;
 import Foodfit.BackEnd.Repository.UserFoodRepository;
+import Foodfit.BackEnd.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,12 +23,16 @@ import java.util.*;
 @Transactional(readOnly = true)
 public class AnalysisService {
     private final UserFoodRepository userFoodRepository;
+    private final UserRepository userRepository;
 
-    public DailyAnalysisDTO getDailyAnalysis(User user){
+    public DailyAnalysisDTO getDailyAnalysis(UserDTO userDTO){
         // 현재시간
         LocalDate today = LocalDate.now();
         LocalDateTime todayStart = LocalDateTime.of(today, LocalTime.MIN);
         LocalDateTime todayEnd = LocalDateTime.of(today, LocalTime.MAX);
+        User user = userRepository.findById(userDTO.getId())
+                .orElseThrow(() -> new NoSuchElementException("사용자를 찾을 수 없습니다."));
+
 
         // UserFood 조회
         List<UserFood> userFoods = Optional.ofNullable(userFoodRepository.findByUserAndDateBetween(user, todayStart, todayEnd))
@@ -50,7 +56,9 @@ public class AnalysisService {
         return new DailyAnalysisDTO(totalCalorie, totalProtein, totalFat, totalSalt);
     }
 
-    public List<PeriodAnalysisDTO> getPeriodAnalysis(User user, LocalDate startDate, LocalDate endDate, String nutrient) {
+    public List<PeriodAnalysisDTO> getPeriodAnalysis(UserDTO userDTO, LocalDate startDate, LocalDate endDate, String nutrient) {
+        User user = userRepository.findById(userDTO.getId())
+                .orElseThrow(() -> new NoSuchElementException("사용자를 찾을 수 없습니다."));
         List<UserFood> userFoods = userFoodRepository.findByUserAndDateBetween(user, startDate.atStartOfDay(), endDate.atTime(LocalTime.MAX));
         Map<LocalDate, Double> nutrientMap = new HashMap<>();
 
