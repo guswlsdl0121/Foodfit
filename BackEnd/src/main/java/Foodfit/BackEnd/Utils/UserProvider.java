@@ -1,5 +1,6 @@
 package Foodfit.BackEnd.Utils;
 
+import Foodfit.BackEnd.DTO.UserDTO;
 import Foodfit.BackEnd.Domain.User;
 import Foodfit.BackEnd.Exception.NullFieldException;
 
@@ -22,7 +23,7 @@ public class UserProvider {
      * @param
      * @return 조회된 유저 객체 Optional
     */
-    public Optional<User> getUser() {
+    public Optional<UserDTO> getUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated()) {
             // 인증되지 않은 경우 예외 처리 또는 다른 처리를 수행할 수 있습니다.
@@ -30,8 +31,8 @@ public class UserProvider {
         }
 
         Object principal = authentication.getPrincipal();
-        if (principal instanceof User) {
-            return Optional.ofNullable((User)principal);
+        if (principal instanceof UserDTO) {
+            return Optional.ofNullable((UserDTO)principal);
         }
 
 
@@ -47,9 +48,9 @@ public class UserProvider {
      * @param userEntity(User), fieldNames(String ...)
      * @return 모두 not null이라면 true, 하나라도 null인 필드가 있다면 false
      */
-    public void verifyIsFieldNotNull(User user, UserFields ... fieldNames) throws NoSuchFieldException, IllegalAccessException {
+    public void verifyIsFieldNotNull(UserDTO user, UserFields ... fieldNames) throws NoSuchFieldException, IllegalAccessException {
         // Java Reflection을 사용해 테스트 진행
-        Class<? extends User> userClass = user.getClass();
+        Class<? extends UserDTO> userClass = user.getClass();
 
         for(UserFields fieldName : fieldNames){
             Field field = userClass.getDeclaredField(fieldName.name());
@@ -68,6 +69,6 @@ public class UserProvider {
         return (value == null) || (value instanceof Number && value.equals(0));
     }
     public  enum UserFields{
-        id, name, age, gender, uid;
+        id, name, age, gender, uid, profileImage;
     }
 }
