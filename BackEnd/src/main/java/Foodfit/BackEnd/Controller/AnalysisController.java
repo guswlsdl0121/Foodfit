@@ -2,7 +2,7 @@ package Foodfit.BackEnd.Controller;
 
 import Foodfit.BackEnd.Aop.Annotations.AdditionalUserInfoCheck;
 import Foodfit.BackEnd.DTO.DailyAnalysisDTO;
-import Foodfit.BackEnd.DTO.Response.PeriodAnalysisDTO;
+import Foodfit.BackEnd.DTO.PeriodAnalysisDTO;
 import Foodfit.BackEnd.DTO.UserDTO;
 import Foodfit.BackEnd.Service.AnalysisService;
 import io.swagger.v3.oas.annotations.Operation;
