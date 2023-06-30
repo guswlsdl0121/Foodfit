@@ -1,6 +1,7 @@
 package Foodfit.BackEnd.Aop;
 
 
+import Foodfit.BackEnd.DTO.UserDTO;
 import Foodfit.BackEnd.Domain.User;
 import Foodfit.BackEnd.Utils.UserProvider;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,9 +32,9 @@ public class UserCheckAspect {
 
     @Around("@annotation(Foodfit.BackEnd.Aop.Annotations.AdditionalUserInfoCheck)")
     public Object additionalUserInfoCheck(ProceedingJoinPoint pjp) throws Throwable {
-        User user = userProvider.getUser().orElseThrow(()->new NoSuchElementException("유저 정보를 찾을 수 없습니다."));
+        UserDTO userDTO = userProvider.getUser().orElseThrow(() -> new NoSuchElementException("유저 정보를 찾을 수 없습니다."));
 
-        userProvider.verifyIsFieldNotNull(user,  UserProvider.UserFields.age, UserProvider.UserFields.gender);
+        userProvider.verifyIsFieldNotNull(userDTO, UserProvider.UserFields.age, UserProvider.UserFields.gender);
 
         addUserInRequest(pjp);
         // 해당 클래스의 메소드 실행
@@ -48,8 +49,9 @@ public class UserCheckAspect {
                 continue;
             }
             HttpServletRequest request = (HttpServletRequest) obj;
-            User user = userProvider.getUser().orElseThrow(()->new NoSuchElementException("유저 정보를 찾을 수 없습니다."));
-            request.setAttribute("user", user);
+            UserDTO userDTO = userProvider.getUser().orElseThrow(() -> new NoSuchElementException("유저 정보를 찾을 수 없습니다."));
+
+            request.setAttribute("user", userDTO);
 
             break;
 
