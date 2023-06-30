@@ -16,7 +16,7 @@ public class BoardImage {
     @Column(name = "board_image_id")
     private Long id;
 
-    private String imageUrl;
+    private byte[] imageBlob;
 
     @ManyToOne
     @JoinColumn(name = "board_id", referencedColumnName = "board_id")
