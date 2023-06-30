@@ -1,7 +1,7 @@
 package Foodfit.BackEnd.Service;
 
 import Foodfit.BackEnd.DTO.DailyAnalysisDTO;
-import Foodfit.BackEnd.DTO.Response.PeriodAnalysisDTO;
+import Foodfit.BackEnd.DTO.PeriodAnalysisDTO;
 import Foodfit.BackEnd.DTO.UserDTO;
 import Foodfit.BackEnd.Domain.Food;
 import Foodfit.BackEnd.Domain.User;
@@ -102,6 +102,7 @@ public class AnalysisService {
             case "protein" -> food.getProtein() * weightRatio;
             case "fat" -> food.getFat() * weightRatio;
             case "salt" -> food.getSalt() * weightRatio;
+            case "caloroie" -> food.getCalorie() * weightRatio;
             // Handle other nutrients accordingly
             default -> throw new IllegalArgumentException("Invalid nutrient type: " + nutrient);
         };

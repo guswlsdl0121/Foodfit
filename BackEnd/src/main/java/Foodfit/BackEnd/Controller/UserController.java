@@ -9,6 +9,7 @@ import Foodfit.BackEnd.Domain.Gender;
 import Foodfit.BackEnd.Domain.User;
 import Foodfit.BackEnd.Service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -21,12 +22,14 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
+@Tag(name = "사용자 관련 API", description = "사용자 정보 조회, 정보 변경, 카카오 로그인용 하이퍼링크입니다.")
 public class UserController {
 
     private final UserService userService;
 
 
     @GetMapping("/user")
+    @Operation(description = "사용자 정보 조회입니다.")
     @LoginCheck
     public UserResponse getUser(HttpServletRequest req){
         UserDTO userDTO = (UserDTO) req.getAttribute("user");
