@@ -9,5 +9,4 @@ import java.util.List;
 
 public interface UserFoodRepository extends JpaRepository<UserFood, Long> {
     List<UserFood> findByUserAndDateBetween(User user, LocalDateTime startDate, LocalDateTime endDate);
-
 }

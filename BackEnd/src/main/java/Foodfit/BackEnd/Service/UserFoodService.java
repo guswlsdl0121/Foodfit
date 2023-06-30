@@ -1,11 +1,14 @@
 package Foodfit.BackEnd.Service;
 
+import Foodfit.BackEnd.DTO.UserDTO;
 import Foodfit.BackEnd.DTO.UserFoodDTO;
 import Foodfit.BackEnd.Domain.Food;
 import Foodfit.BackEnd.Domain.User;
 import Foodfit.BackEnd.Domain.UserFood;
 import Foodfit.BackEnd.Repository.FoodRepository;
 import Foodfit.BackEnd.Repository.UserFoodRepository;
+import Foodfit.BackEnd.Repository.UserRepository;
+import io.github.classgraph.FieldInfoList;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -14,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 
 @Service
@@ -23,16 +27,23 @@ import java.util.List;
 public class UserFoodService {
     private final UserFoodRepository userFoodRepository;
     private final FoodRepository foodRepository;
+    private final UserRepository userRepository;
 
+    /**
+     * methodName : addUserFoods
+     * author : guswlsdl
+     * description : 사용자가 먹은 음식을 테이블에 추가한다.
+     * @param  userFoodDTO, user
+     * @return 없음
+     */
     @Transactional
-    public List<UserFood> addUserFoods(UserFoodDTO userFoodDTO, User user) {
+    public List<UserFood> addUserFoods(UserFoodDTO userFoodDTO, UserDTO userDTO) {
         List<Long> foodIds = userFoodDTO.foodIds();
         List<Double> weights = userFoodDTO.weights();
         log.info("foodids = {}", foodIds);
         log.info("weight = {}", weights);
 
-        log.info("사용자 pk : {}", user.getId());
-
+        User user = userRepository.findById(userDTO.getId()).orElseThrow(NoSuchElementException::new);
         // Food 조회
         List<Food> foods = foodRepository.findAllById(foodIds);
 

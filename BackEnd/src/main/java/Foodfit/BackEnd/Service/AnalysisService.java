@@ -1,7 +1,7 @@
 package Foodfit.BackEnd.Service;
 
 import Foodfit.BackEnd.DTO.DailyAnalysisDTO;
-import Foodfit.BackEnd.DTO.PeriodAnalysisDTO;
+import Foodfit.BackEnd.DTO.Response.PeriodAnalysisDTO;
 import Foodfit.BackEnd.DTO.UserDTO;
 import Foodfit.BackEnd.Domain.Food;
 import Foodfit.BackEnd.Domain.User;
@@ -56,6 +56,13 @@ public class AnalysisService {
         return new DailyAnalysisDTO(totalCalorie, totalProtein, totalFat, totalSalt);
     }
 
+    /**
+     * methodName : getPeriodAnalysis
+     * author : guswlsdl
+     * description : 기간을 입력받고 그에 해당하는 사용자가 섭취한 영양분을 반환한다.
+     * @param  userDTO, startDate, endDate, nutrient
+     * @return nutrientList
+     */
     public List<PeriodAnalysisDTO> getPeriodAnalysis(UserDTO userDTO, LocalDate startDate, LocalDate endDate, String nutrient) {
         User user = userRepository.findById(userDTO.getId())
                 .orElseThrow(() -> new NoSuchElementException("사용자를 찾을 수 없습니다."));
@@ -80,6 +87,13 @@ public class AnalysisService {
         return nutrientList;
     }
 
+    /**
+     * methodName : getDayAmount
+     * author : guswlsdl
+     * description : 사용자가 하루동안 먹은 음식의 영양분을 조회한다.
+     * @param  userFood, nutrient
+     * @return 없음
+     */
     private double getDayAmount(UserFood userFood, String nutrient) {
         Food food = userFood.getFood();
         double weightRatio = userFood.getWeight() / 100;

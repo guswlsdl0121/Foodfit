@@ -1,6 +1,7 @@
 package Foodfit.BackEnd.Controller;
 
 import Foodfit.BackEnd.Aop.Annotations.AdditionalUserInfoCheck;
+import Foodfit.BackEnd.DTO.UserDTO;
 import Foodfit.BackEnd.DTO.UserFoodDTO;
 import Foodfit.BackEnd.Domain.User;
 import Foodfit.BackEnd.Domain.UserFood;
@@ -22,8 +23,8 @@ public class UserFoodController {
     @PostMapping
     @AdditionalUserInfoCheck
     public ResponseEntity<List<UserFood>> addUserFood(HttpServletRequest request, @RequestBody UserFoodDTO userFoodDTO) {
-        User user = (User)request.getAttribute("user");
-        List<UserFood> userFoods = userFoodService.addUserFoods(userFoodDTO, user);
+        UserDTO userDTO = (UserDTO)request.getAttribute("user");
+        List<UserFood> userFoods = userFoodService.addUserFoods(userFoodDTO, userDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(userFoods);
     }
 

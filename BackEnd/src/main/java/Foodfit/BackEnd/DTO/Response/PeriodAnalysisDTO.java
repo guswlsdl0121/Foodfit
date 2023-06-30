@@ -1,4 +1,4 @@
-package Foodfit.BackEnd.DTO;
+package Foodfit.BackEnd.DTO.Response;
 
 import java.time.LocalDate;
 

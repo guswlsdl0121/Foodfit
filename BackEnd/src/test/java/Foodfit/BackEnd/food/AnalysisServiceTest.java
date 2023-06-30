@@ -1,6 +1,6 @@
 package Foodfit.BackEnd.food;
 
-import Foodfit.BackEnd.DTO.PeriodAnalysisDTO;
+import Foodfit.BackEnd.DTO.Response.PeriodAnalysisDTO;
 import Foodfit.BackEnd.Domain.Food;
 import Foodfit.BackEnd.Domain.User;
 import Foodfit.BackEnd.Domain.UserFood;
