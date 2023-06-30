@@ -1,6 +1,6 @@
 package Foodfit.BackEnd.Controller;
 
-import Foodfit.BackEnd.DTO.FoodSearchResponse;
+import Foodfit.BackEnd.DTO.Response.FoodSearchResponse;
 import Foodfit.BackEnd.Domain.Food;
 import Foodfit.BackEnd.Service.FoodService;
 import io.swagger.v3.oas.annotations.Operation;

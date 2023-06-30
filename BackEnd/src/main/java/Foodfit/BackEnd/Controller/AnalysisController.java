@@ -3,6 +3,7 @@ package Foodfit.BackEnd.Controller;
 import Foodfit.BackEnd.Aop.Annotations.AdditionalUserInfoCheck;
 import Foodfit.BackEnd.DTO.DailyAnalysisDTO;
 import Foodfit.BackEnd.DTO.PeriodAnalysisDTO;
+import Foodfit.BackEnd.DTO.Response.PeriodAnalysisResponse;
 import Foodfit.BackEnd.DTO.UserDTO;
 import Foodfit.BackEnd.Service.AnalysisService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -42,7 +43,7 @@ public class AnalysisController {
             "영양분으로는 protein(단백질), fat(지방), salt(나트륨), caloroie(열량)이 있습니다.")
     @GetMapping("/period")
     @AdditionalUserInfoCheck
-    public ResponseEntity<List<PeriodAnalysisDTO>> getUserFoodNutrientAmount(
+    public ResponseEntity<PeriodAnalysisResponse> makePeriodAnalysis(
             @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
             @RequestParam("nutrient") String nutrient,
@@ -50,7 +51,8 @@ public class AnalysisController {
     ) {
         UserDTO userDTO = (UserDTO) request.getAttribute("user");
         List<PeriodAnalysisDTO> nutrientList = analysisService.getPeriodAnalysis(userDTO, startDate, endDate, nutrient);
-        return ResponseEntity.ok(nutrientList);
+        PeriodAnalysisResponse response = new PeriodAnalysisResponse(nutrientList);
+        return ResponseEntity.ok(response);
     }
 }
 
