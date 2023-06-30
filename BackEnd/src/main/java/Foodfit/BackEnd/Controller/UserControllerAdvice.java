@@ -1,6 +1,7 @@
 package Foodfit.BackEnd.Controller;
 
 
+import Foodfit.BackEnd.DTO.Response.ErrorResponse;
 import Foodfit.BackEnd.Exception.NullFieldException;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -8,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.time.LocalDate;
 import java.util.NoSuchElementException;
 
 @RestControllerAdvice
@@ -26,15 +26,6 @@ public class UserControllerAdvice {
     }
 
 
-    @Getter
-    class ErrorResponse{
-        private LocalDate timeStamp;
-        private String message;
 
 
-        public ErrorResponse(String message) {
-            timeStamp = LocalDate.now();
-            this.message = message;
-        }
-    }
 }
