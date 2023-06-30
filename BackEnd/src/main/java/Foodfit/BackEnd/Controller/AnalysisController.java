@@ -3,11 +3,13 @@ package Foodfit.BackEnd.Controller;
 import Foodfit.BackEnd.Aop.Annotations.AdditionalUserInfoCheck;
 import Foodfit.BackEnd.DTO.DailyAnalysisDTO;
 import Foodfit.BackEnd.DTO.PeriodAnalysisDTO;
+import Foodfit.BackEnd.DTO.UserDTO;
 import Foodfit.BackEnd.Domain.User;
 import Foodfit.BackEnd.Service.AnalysisService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/analysis")
 @RequiredArgsConstructor
+@Slf4j
 public class AnalysisController {
     private final AnalysisService analysisService;
 
@@ -29,8 +32,8 @@ public class AnalysisController {
     @GetMapping("/daily")
     @AdditionalUserInfoCheck
     public ResponseEntity<DailyAnalysisDTO> makeDailyAnalysis(HttpServletRequest request){
-        User user = (User)request.getAttribute("user");
-        DailyAnalysisDTO daily_analysis = analysisService.getDailyAnalysis(user);
+        UserDTO userDTO = (UserDTO)request.getAttribute("user");
+        DailyAnalysisDTO daily_analysis = analysisService.getDailyAnalysis(userDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(daily_analysis);
     }
 
@@ -42,8 +45,8 @@ public class AnalysisController {
             @RequestParam("nutrient") String nutrient,
             HttpServletRequest request
     ) {
-        User user = (User) request.getAttribute("user");
-        List<PeriodAnalysisDTO> nutrientList = analysisService.getPeriodAnalysis(user, startDate, endDate, nutrient);
+        UserDTO userDTO = (UserDTO) request.getAttribute("user");
+        List<PeriodAnalysisDTO> nutrientList = analysisService.getPeriodAnalysis(userDTO, startDate, endDate, nutrient);
         return ResponseEntity.ok(nutrientList);
     }
 }

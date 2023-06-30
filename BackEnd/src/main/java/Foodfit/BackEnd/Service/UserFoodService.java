@@ -6,7 +6,6 @@ import Foodfit.BackEnd.Domain.User;
 import Foodfit.BackEnd.Domain.UserFood;
 import Foodfit.BackEnd.Repository.FoodRepository;
 import Foodfit.BackEnd.Repository.UserFoodRepository;
-import Foodfit.BackEnd.Utils.UserProvider;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 
 @Service

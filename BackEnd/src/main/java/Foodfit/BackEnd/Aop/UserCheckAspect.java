@@ -2,7 +2,6 @@ package Foodfit.BackEnd.Aop;
 
 
 import Foodfit.BackEnd.DTO.UserDTO;
-import Foodfit.BackEnd.Domain.User;
 import Foodfit.BackEnd.Utils.UserProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
