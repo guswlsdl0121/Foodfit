@@ -47,6 +47,7 @@ public class Log {
     @Lob
     private String detail;
 
+
     public enum LoggingLevel{
         TRACE, DEBUG, INFO, WARN, ERROR
     }
