@@ -18,6 +18,14 @@ public class Log {
                 .build();
     }
 
+    public static Log of(LoggingLevel loggingLevel, String message){
+        return Log.builder()
+                .loggingLevel(loggingLevel)
+                .message(message)
+                .build();
+
+    }
+
     @Builder
     private Log(LoggingLevel loggingLevel, String message, String detail) {
         this.loggingLevel = loggingLevel;

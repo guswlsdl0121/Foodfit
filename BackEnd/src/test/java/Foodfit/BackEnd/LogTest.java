@@ -4,7 +4,6 @@ import Foodfit.BackEnd.Domain.Log;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -26,5 +25,17 @@ class LogTest {
         assertThat(log.getMessage()).isEqualTo(exceptionMessage);
         assertThat(log.getDetail()).isNotEmpty();
 
+    }
+
+    @Test
+    @DisplayName("일반 로그 생성 테스트")
+    void t2(){
+        String message = "test";
+
+        Log log = Log.of(Log.LoggingLevel.INFO, message);
+
+        assertThat(log.getLoggingLevel()).isEqualTo(Log.LoggingLevel.INFO);
+        assertThat(log.getMessage()).isEqualTo(message);
+        assertThat(log.getDetail()).isNull();
     }
 }
