@@ -1,6 +1,7 @@
 package Foodfit.BackEnd.Service;
 
 import Foodfit.BackEnd.Domain.Food;
+import Foodfit.BackEnd.Exception.NotFoundException.NoFoodException;
 import Foodfit.BackEnd.Repository.FoodRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -9,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static Foodfit.BackEnd.Exception.FoodException.*;
+import static Foodfit.BackEnd.Exception.BadRequestException.*;
 
 @Service
 @RequiredArgsConstructor
@@ -26,14 +27,10 @@ public class FoodSearchService {
      */
     public List<Food> searchFoods(String name) {
         List<Food> foods = foodRepository.findTop10ByNameContainingIgnoreCase(name);
-        // 영어로 검색된 경우 처리
-        if (containsEnglish(name)) {
-            throw new EnglishSearchException("영어로 검색된 결과입니다.");
-        }
 
-        if (foods.isEmpty())  {
-            throw new NoSearchResultException("검색 조건에 맞는 음식이 없습니다.");
-        }
+        //예외 처리
+        if (containsEnglish(name)) throw new EnglishSearchException();
+        if (foods.isEmpty()) throw new NoFoodException();
 
         return foods;
     }

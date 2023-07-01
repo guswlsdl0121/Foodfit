@@ -1,6 +1,5 @@
 package Foodfit.BackEnd.Service;
 
-import Foodfit.BackEnd.DTO.UserDTO;
 import Foodfit.BackEnd.Domain.Food;
 import Foodfit.BackEnd.Domain.User;
 import Foodfit.BackEnd.Domain.UserFood;
@@ -15,7 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
+
+import static Foodfit.BackEnd.Exception.NotFoundException.*;
 
 
 @Service
@@ -31,27 +31,24 @@ public class AddUserFoodService {
      * methodName : addUserFoods
      * author : guswlsdl
      * description : 사용자가 먹은 음식을 테이블에 추가한다.
-     * @param  foodIds, weights, userDTO
-     * @return 없음
+     *
+     * @param foodIds, weights, userDTO
      */
     @Transactional
-    public List<UserFood> addUserFoods(List<Long> foodIds, List<Double> weights, UserDTO userDTO) {
-        log.info("foodIds = {}", foodIds);
-        log.info("weights = {}", weights);
+    public void addUserFoods(List<Long> foodIds, List<Double> weights, Long userId) {
+        // User 조회
+        User user = userRepository.findById(userId)
+                .orElseThrow(NoUserException::new);
 
-        User user = userRepository.findById(userDTO.getId()).orElseThrow(NoSuchElementException::new);
         // Food 조회
-        List<Food> foods = foodRepository.findAllById(foodIds);
+        List<Food> foods = foodRepository.findAllByIdIn(foodIds);
 
-        // 현재 시간
-        LocalDateTime date = LocalDateTime.now();
+        if (foods.isEmpty()) throw new NoFoodException();
 
-        // UserFood 생성 및 저장
+        // UserFood를 저장할 List 생성
         List<UserFood> userFoods = new ArrayList<>();
 
-        if (foodIds.size() != weights.size()) {
-            throw new IllegalArgumentException("food의 개수와 weight의 개수가 같아야 합니다.");
-        }
+        LocalDateTime date = LocalDateTime.now();
 
         for (int i = 0; i < foodIds.size(); i++) {
             Food food = foods.get(i);
@@ -63,9 +60,9 @@ public class AddUserFoodService {
                     .date(date)
                     .weight(weight)
                     .build();
+
             userFoods.add(userFood);
         }
-
-        return userFoodRepository.saveAll(userFoods);
+        userFoodRepository.saveAll(userFoods);
     }
 }

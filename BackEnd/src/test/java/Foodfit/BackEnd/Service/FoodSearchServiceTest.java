@@ -1,6 +1,7 @@
 package Foodfit.BackEnd.Service;
 import Foodfit.BackEnd.Domain.Food;
-import Foodfit.BackEnd.Exception.FoodException;
+import Foodfit.BackEnd.Exception.BadRequestException;
+import Foodfit.BackEnd.Exception.NotFoundException;
 import Foodfit.BackEnd.Repository.FoodRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static Foodfit.BackEnd.Exception.NotFoundException.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
@@ -56,7 +58,7 @@ class FoodSearchServiceTest {
         when(foodRepository.findTop10ByNameContainingIgnoreCase(eq("사과"))).thenReturn(Collections.emptyList());
 
         // Calling the method to be tested and asserting the exception
-        assertThrows(FoodException.NoSearchResultException.class, () -> foodSearchService.searchFoods("사과"));
+        assertThrows(NoFoodException.class, () -> foodSearchService.searchFoods("사과"));
     }
 
     @Test
@@ -65,6 +67,6 @@ class FoodSearchServiceTest {
         when(foodRepository.findTop10ByNameContainingIgnoreCase(eq("사과"))).thenReturn(Collections.emptyList());
 
         // Calling the method to be tested and asserting the exception
-        assertThrows(FoodException.EnglishSearchException.class, () -> foodSearchService.searchFoods("apple"));
+        assertThrows(BadRequestException.EnglishSearchException.class, () -> foodSearchService.searchFoods("apple"));
     }
 }
