@@ -1,42 +1,59 @@
 package Foodfit.BackEnd.food;
 
 import Foodfit.BackEnd.DTO.PeriodAnalysisDTO;
+import Foodfit.BackEnd.DTO.UserDTO;
 import Foodfit.BackEnd.Domain.Food;
+import Foodfit.BackEnd.Domain.Gender;
 import Foodfit.BackEnd.Domain.User;
 import Foodfit.BackEnd.Domain.UserFood;
 import Foodfit.BackEnd.Repository.UserFoodRepository;
+import Foodfit.BackEnd.Repository.UserRepository;
 import Foodfit.BackEnd.Service.AnalysisService;
-import org.junit.jupiter.api.BeforeEach;
+
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
-class AnalysisServiceTest {
 
+@ExtendWith(MockitoExtension.class)
+public class AnalysisServiceTest {
+
+    @InjectMocks
     private AnalysisService analysisService;
 
     @Mock
     private UserFoodRepository userFoodRepository;
 
-    @BeforeEach
-    void setup() {
-        MockitoAnnotations.openMocks(this);
-        analysisService = new AnalysisService(userFoodRepository);
+    @Mock
+    private UserRepository userRepository;
+
+
+    @Test
+    void InjectionTest() {
+        assertNotNull(userRepository);
+        assertNotNull(userFoodRepository);
+        assertNotNull(analysisService);
     }
 
     @Disabled
     @Test
     void testGetPeriodAnalysis() {
         // Mock data
-        User user = new User();
+        User user = new User(1L, "tester", 22, Gender.MALE, 2134L, null);
+        UserDTO userDTO = new UserDTO(1L, "tester", 22, Gender.MALE, null);
+
         LocalDate startDate = LocalDate.of(2023, 6, 26);
         LocalDate endDate = LocalDate.of(2023, 6, 30);
         String nutrient = "protein";
@@ -61,7 +78,7 @@ class AnalysisServiceTest {
         expected.add(new PeriodAnalysisDTO(LocalDate.of(2023, 6, 30), 24.0));
 
         // Perform the method call
-        List<PeriodAnalysisDTO> result = analysisService.getPeriodAnalysis(user, startDate, endDate, nutrient);
+        List<PeriodAnalysisDTO> result = analysisService.getPeriodAnalysis(userDTO, startDate, endDate, nutrient);
 
         // Assertion
         assertEquals(expected, result);
