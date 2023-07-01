@@ -2,10 +2,12 @@ package Foodfit.BackEnd.Domain;
 
 import jakarta.persistence.*;
 import lombok.Builder;
+import lombok.Getter;
 
 import java.util.Arrays;
 
 @Entity
+@Getter
 public class Log {
 
     public static Log of(LoggingLevel loggingLevel, Exception e){

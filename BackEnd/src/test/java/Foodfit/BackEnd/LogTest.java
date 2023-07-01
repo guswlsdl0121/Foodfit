@@ -12,15 +12,33 @@ class LogTest {
 
 
     @Test
-    @DisplayName("로그 생성 테스트")
+    @DisplayName("로그 생성 테스트 : cause가 있는 Exception")
     void t1(){
+        String exceptionMessage = "테스트용 Exception입니다.";
+
         try{
-            new File("test");
+            throwException(exceptionMessage);
         }catch (Exception e){
-            Log of = Log.of(Log.LoggingLevel.ERROR, e);
-            System.out.println();
+            Log log = Log.of(Log.LoggingLevel.ERROR, e);
+
+            assertThat(log.getLoggingLevel()).isEqualTo(Log.LoggingLevel.ERROR);
+            assertThat(log.getMessage()).isEqualTo(exceptionMessage);
+            assertThat(log.getDetail()).isNotEmpty();
+
+
+            return;
+        }
+        fail("예외가 발생해야 합니다.");
+    }
+
+
+
+    private void throwException(String exceptionMessage){
+        try{
+            new File((String) null);
+        }catch (Exception e){
+           throw new RuntimeException(exceptionMessage, e);
         }
 
     }
-
 }
