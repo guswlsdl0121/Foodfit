@@ -3,6 +3,7 @@ version: '3.8'
 services:
   mysql:
     image: mysql:8.0
+    container_name: mysqlDB
     volumes:
       - ./Database/mysql:/var/lib/mysql
     environment:
@@ -10,7 +11,17 @@ services:
       MYSQL_DATABASE: foodfit
     ports:
        - 3307:3306
+
+  backend:
+    container_name: backend
+    build:
+      context: .
+      dockerfile: ./BackEnd/Dockerfile
+    depends_on:
+      - mysql
+
   nginx:
+    container_name: frontend
     build:
       context: .
       dockerfile: ./Frontend/Dockerfile
@@ -20,5 +31,8 @@ services:
       - ./Frontend/build:/app/build
       - ./Frontend/nginx.conf:/etc/nginx/conf.d/nginx.conf
     command: nginx -g 'daemon off;'
+    depends_on:
+      - backend
+
 volumes:
   mysql-data:
