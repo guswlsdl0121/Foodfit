@@ -1,4 +1,4 @@
-package Foodfit.BackEnd.Controller;
+package Foodfit.BackEnd.Controller.ExceptionHandler;
 
 
 import Foodfit.BackEnd.DTO.Response.ErrorResponse;
