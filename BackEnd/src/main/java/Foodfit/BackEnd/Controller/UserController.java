@@ -3,41 +3,42 @@ package Foodfit.BackEnd.Controller;
 import Foodfit.BackEnd.Aop.Annotations.LoginCheck;
 import Foodfit.BackEnd.DTO.Request.UpdateUserRequest;
 import Foodfit.BackEnd.DTO.Response.UserResponse;
+import Foodfit.BackEnd.DTO.UserDTO;
 import Foodfit.BackEnd.DTO.UserUpdateDTO;
 import Foodfit.BackEnd.Domain.Gender;
 import Foodfit.BackEnd.Domain.User;
 import Foodfit.BackEnd.Service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.InputMismatchException;
 
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
+@Tag(name = "사용자 관련 API", description = "사용자 정보 조회, 정보 변경, 카카오 로그인용 하이퍼링크입니다.")
 public class UserController {
 
     private final UserService userService;
 
 
     @GetMapping("/user")
+    @Operation(description = "사용자 정보 조회입니다.")
     @LoginCheck
     public UserResponse getUser(HttpServletRequest req){
-        User user = (User) req.getAttribute("user");
+        UserDTO userDTO = (UserDTO) req.getAttribute("user");
 
         return UserResponse.builder()
-                .name(user.getName())
-                .age(user.getAge())
-                .gender(user.getGender())
-                .profileImage(user.getProfileImage())
+                .name(userDTO.getName())
+                .age(userDTO.getAge())
+                .gender(userDTO.getGender())
+                .profileImage(userDTO.getProfileImage())
                 .build();
 
     }
@@ -49,12 +50,12 @@ public class UserController {
         res.sendRedirect("/oauth2/authorization/kakao");
     }
 
-    @PutMapping("/user/")
+    @PutMapping("/user")
     @LoginCheck
     @Operation(description = "유저 정보 업데이트 URL입니다. 바뀌지 않은 값이여도 모두 넘겨주어야합니다.\n" +
             "gender의 값으로 \"남\"이 들어가는 단어는 남성, \"여\"가 들어가는 단어는 여자로 인식해 저장합니다. 또는 MALE, FEMALE도 가능합니다.")
     public ResponseEntity updateUser(HttpServletRequest req, @RequestBody UpdateUserRequest reqBody){
-        final User user = (User) req.getAttribute("user");
+        final UserDTO userDTO = (UserDTO) req.getAttribute("user");
 
         Gender gender = getGenderFromRequest(reqBody);
 
@@ -64,7 +65,7 @@ public class UserController {
                 .age(reqBody.getAge())
                 .build();
 
-        userService.updateUser(user.getId(), dto);
+        userService.updateUser(userDTO.getId(), dto);
 
         return new ResponseEntity(HttpStatus.OK);
     }

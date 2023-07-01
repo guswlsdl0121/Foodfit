@@ -1,6 +1,5 @@
 package Foodfit.BackEnd.Filter;
 
-import Foodfit.BackEnd.DTO.UserDTO;
 import Foodfit.BackEnd.Domain.User;
 import Foodfit.BackEnd.Exception.AuthorizeExceptionMessages;
 import Foodfit.BackEnd.Exception.UnAuthorizedException;
@@ -69,7 +68,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 .orElseThrow(() -> new IllegalStateException(AuthorizeExceptionMessages.CANNOT_FIND_USER_FROM_TOKEN.MESSAGE));
 
         // DTO로 데이터를 전달
-        UserDTO userDto = UserDTO.builder()
+        Foodfit.BackEnd.DTO.UserDTO userDto = Foodfit.BackEnd.DTO.UserDTO.builder()
                 .id(user.getId())
                 .name(user.getName())
                 .age(user.getAge())

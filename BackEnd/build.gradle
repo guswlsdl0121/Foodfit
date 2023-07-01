@@ -48,6 +48,10 @@ dependencies {
 
 //P6spy
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
+
+	// h2 database for test
+	testImplementation 'com.h2database:h2:2.1.214'
+
 }
 
 tasks.named('test') {

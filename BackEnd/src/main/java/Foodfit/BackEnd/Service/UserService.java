@@ -1,6 +1,5 @@
 package Foodfit.BackEnd.Service;
 
-import Foodfit.BackEnd.Auth.ChangeableToUser;
 import Foodfit.BackEnd.DTO.UserUpdateDTO;
 import Foodfit.BackEnd.Domain.User;
 import Foodfit.BackEnd.Repository.UserRepository;
