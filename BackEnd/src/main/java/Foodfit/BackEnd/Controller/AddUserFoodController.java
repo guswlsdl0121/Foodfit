@@ -4,7 +4,7 @@ import Foodfit.BackEnd.Aop.Annotations.AdditionalUserInfoCheck;
 import Foodfit.BackEnd.DTO.Request.UserFoodDTO;
 import Foodfit.BackEnd.DTO.UserDTO;
 import Foodfit.BackEnd.Domain.UserFood;
-import Foodfit.BackEnd.Service.UserFoodService;
+import Foodfit.BackEnd.Service.AddUserFoodService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,8 +20,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/foods")
 @RequiredArgsConstructor
-public class UserFoodController {
-    private final UserFoodService userFoodService;
+public class AddUserFoodController {
+    private final AddUserFoodService addUserFoodService;
 
     @PostMapping
     @AdditionalUserInfoCheck
@@ -36,7 +36,7 @@ public class UserFoodController {
             foodIds.add(item.foodid());
             weights.add(item.weight());
         }
-        userFoodService.addUserFoods(foodIds, weights, userDTO);
+        addUserFoodService.addUserFoods(foodIds, weights, userDTO);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }

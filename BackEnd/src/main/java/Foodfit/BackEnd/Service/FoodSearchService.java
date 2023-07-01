@@ -16,7 +16,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class FoodService {
+public class FoodSearchService {
     private final FoodRepository foodRepository;
 
     /**
