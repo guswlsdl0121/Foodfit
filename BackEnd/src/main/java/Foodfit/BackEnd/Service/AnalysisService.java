@@ -6,6 +6,9 @@ import Foodfit.BackEnd.DTO.UserDTO;
 import Foodfit.BackEnd.Domain.Food;
 import Foodfit.BackEnd.Domain.User;
 import Foodfit.BackEnd.Domain.UserFood;
+
+import Foodfit.BackEnd.Exception.NotFoundException.NoUserException;
+import Foodfit.BackEnd.Exception.NotFoundException.NoFoodException;
 import Foodfit.BackEnd.Repository.UserFoodRepository;
 import Foodfit.BackEnd.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,36 +27,47 @@ import java.util.*;
 public class AnalysisService {
     private final UserFoodRepository userFoodRepository;
     private final UserRepository userRepository;
+    private final DatabaseLogger databaseLogger;
 
+    /**
+     * methodName : getDailyAnalysis
+     * author : junha
+     * description : 당일날 사용자가 섭취한 영양분을 반환한다.
+     * @param  userDTO
+     * @return DailyAnalysisDTO
+     */
     public DailyAnalysisDTO getDailyAnalysis(UserDTO userDTO){
-        // 현재시간
-        LocalDate today = LocalDate.now();
-        LocalDateTime todayStart = LocalDateTime.of(today, LocalTime.MIN);
-        LocalDateTime todayEnd = LocalDateTime.of(today, LocalTime.MAX);
-        User user = userRepository.findById(userDTO.getId())
-                .orElseThrow(() -> new NoSuchElementException("사용자를 찾을 수 없습니다."));
+        try {
+            LocalDate today = LocalDate.now();
+            LocalDateTime todayStart = LocalDateTime.of(today, LocalTime.MIN);
+            LocalDateTime todayEnd = LocalDateTime.of(today, LocalTime.MAX);
+
+            User user = userRepository.findById(userDTO.getId()).orElseThrow(NoUserException::new);
+
+            List<UserFood> userFoods = userFoodRepository.findByUserAndDateBetween(user, todayStart, todayEnd);
 
 
-        // UserFood 조회
-        List<UserFood> userFoods = Optional.ofNullable(userFoodRepository.findByUserAndDateBetween(user, todayStart, todayEnd))
-                .orElse(new ArrayList<>());
+            int totalCalorie = 0;
+            double totalProtein = 0.0;
+            double totalFat = 0.0;
+            double totalSalt = 0.0;
 
-        // 영양소
-        int totalCalorie = 0;
-        double totalProtein = 0.0;
-        double totalFat = 0.0;
-        double totalSalt = 0.0;
+            for (UserFood userFood : userFoods) {
+                Food food = userFood.getFood();
+                if (food == null) throw new NoFoodException();
 
-        for (UserFood userFood : userFoods){
-            Food food = userFood.getFood();
-            double weightRatio = userFood.getWeight() / 100;
+                double weightRatio = userFood.getWeight() / 100;
 
-            totalCalorie += food.getCalorie()*weightRatio;
-            totalProtein += Math.round(food.getProtein()*weightRatio);
-            totalFat += Math.round(food.getFat()*weightRatio);
-            totalSalt += Math.round(food.getSalt()*weightRatio);
+                totalCalorie += food.getCalorie() * weightRatio;
+                totalProtein += Math.round(food.getProtein() * weightRatio);
+                totalFat += Math.round(food.getFat() * weightRatio);
+                totalSalt += Math.round(food.getSalt() * weightRatio);
+            }
+            return new DailyAnalysisDTO(totalCalorie, totalProtein, totalFat, totalSalt);
+        } catch(NoUserException | NoFoodException e){
+            databaseLogger.saveLog(e);
+            return null;
         }
-        return new DailyAnalysisDTO(totalCalorie, totalProtein, totalFat, totalSalt);
     }
 
     /**
