@@ -9,5 +9,6 @@ import java.util.List;
 
 public interface FoodRepository extends JpaRepository<Food, Long> {
     List<Food> findTop10ByNameContainingIgnoreCase(String name);
+    List<Food> findAllByIdIn(List<Long> ids);
 }
 
