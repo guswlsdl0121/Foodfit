@@ -2,7 +2,7 @@ package Foodfit.BackEnd.Controller;
 
 import Foodfit.BackEnd.DTO.Response.FoodSearchResponse;
 import Foodfit.BackEnd.Domain.Food;
-import Foodfit.BackEnd.Service.FoodService;
+import Foodfit.BackEnd.Service.FoodSearchService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,18 +15,18 @@ import java.util.stream.Collectors;
 @Tag(name = "검색 기능 API", description = "사용자가 음식을 검색합니다.")
 @RestController
 @RequestMapping("/api")
-public class FoodController {
+public class FoodSearchController {
 
-    private final FoodService foodService;
+    private final FoodSearchService foodSearchService;
 
-    public FoodController(FoodService foodService) {
-        this.foodService = foodService;
+    public FoodSearchController(FoodSearchService foodSearchService) {
+        this.foodSearchService = foodSearchService;
     }
 
     @Operation(description = "키워드로 음식을 검색하면 상위 10개의 검색 결과를 반환합니다.")
     @GetMapping("/food")
     public FoodSearchResponse searchFoods(@RequestParam("name") String name) {
-        List<Food> foods = foodService.searchFoods(name);
+        List<Food> foods = foodSearchService.searchFoods(name);
         List<FoodSearchResponse.FoodDTO> foodDTOs = foods.stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());

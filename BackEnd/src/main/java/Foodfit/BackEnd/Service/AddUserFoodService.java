@@ -1,6 +1,5 @@
 package Foodfit.BackEnd.Service;
 
-import Foodfit.BackEnd.DTO.Request.UserFoodDTO;
 import Foodfit.BackEnd.DTO.UserDTO;
 import Foodfit.BackEnd.Domain.Food;
 import Foodfit.BackEnd.Domain.User;
@@ -23,7 +22,7 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Slf4j
-public class UserFoodService {
+public class AddUserFoodService {
     private final UserFoodRepository userFoodRepository;
     private final FoodRepository foodRepository;
     private final UserRepository userRepository;

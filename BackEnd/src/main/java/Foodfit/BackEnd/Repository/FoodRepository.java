@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface FoodRepository extends JpaRepository<Food, Long> {
-    Page<Food> findByNameContainingIgnoreCase(String name, Pageable pageable);
+    List<Food> findTop10ByNameContainingIgnoreCase(String name);
 }
 
