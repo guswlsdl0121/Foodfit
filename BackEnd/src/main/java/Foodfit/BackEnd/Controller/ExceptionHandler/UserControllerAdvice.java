@@ -1,4 +1,4 @@
-package Foodfit.BackEnd.Controller;
+package Foodfit.BackEnd.Controller.ExceptionHandler;
 
 
 import Foodfit.BackEnd.DTO.Response.ErrorResponse;
@@ -24,8 +24,4 @@ public class UserControllerAdvice {
     public ResponseEntity<ErrorResponse> NoUserInContext(Exception e){
         return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.UNAUTHORIZED);
     }
-
-
-
-
 }
