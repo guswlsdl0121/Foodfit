@@ -1,4 +1,4 @@
-package Foodfit.BackEnd.Controller;
+package Foodfit.BackEnd.Service.Controller;
 
 import Foodfit.BackEnd.Aop.Annotations.AdditionalUserInfoCheck;
 import Foodfit.BackEnd.DTO.Request.AddUserFoodDTO;
@@ -27,6 +27,7 @@ public class AddUserFoodController {
     @Operation(description = "식단 추가하기에서 검색 결과로 반환된 음식의 ID와 그 음식의 중량을 요청으로 보내주어야 합니다.")
     public ResponseEntity<List<UserFood>> addUserFood(@RequestBody AddUserFoodDTO addUserFoodDTO, HttpServletRequest request) {
         Long userId = ((UserDTO) request.getAttribute("user")).getId();
+
         List<Long> foodIds = addUserFoodDTO.toFoodIdList();
         List<Double> weights = addUserFoodDTO.toWeightList();
 

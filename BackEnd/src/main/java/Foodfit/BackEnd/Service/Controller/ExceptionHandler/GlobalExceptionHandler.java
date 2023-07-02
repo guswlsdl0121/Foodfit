@@ -1,4 +1,4 @@
-package Foodfit.BackEnd.Controller.ExceptionHandler;
+package Foodfit.BackEnd.Service.Controller.ExceptionHandler;
 
 import Foodfit.BackEnd.DTO.Response.ErrorResponse;
 import org.springframework.http.HttpStatus;

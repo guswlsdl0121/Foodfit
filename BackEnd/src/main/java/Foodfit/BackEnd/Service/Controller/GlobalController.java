@@ -1,4 +1,4 @@
-package Foodfit.BackEnd.Controller;
+package Foodfit.BackEnd.Service.Controller;
 
 
 import Foodfit.BackEnd.Aop.Annotations.AdditionalUserInfoCheck;

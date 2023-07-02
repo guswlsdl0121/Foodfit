@@ -1,10 +1,14 @@
 package Foodfit.BackEnd.Service;
 
+import Foodfit.BackEnd.Aop.Annotations.TimeLog;
 import Foodfit.BackEnd.Domain.Food;
 import Foodfit.BackEnd.Exception.NotFoundException.NoFoodException;
 import Foodfit.BackEnd.Repository.FoodRepository;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +29,7 @@ public class FoodSearchService {
      * @param  name
      * @return foodPage.getContent();
      */
+    @TimeLog
     public List<Food> searchFoods(String name) {
         List<Food> foods = foodRepository.findTop10ByNameContainingIgnoreCase(name);
 
@@ -33,6 +38,17 @@ public class FoodSearchService {
         if (foods.isEmpty()) throw new NoFoodException();
 
         return foods;
+    }
+
+    //TODO [HJ] 성능 비교를 위핸 Pagination을 이용한 코드
+    public List<Food> searchFoodsWithPagination(String name, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Food> foodPage = foodRepository.findAllByNameContainingIgnoreCase(name, pageable);
+
+        if (containsEnglish(name)) throw new EnglishSearchException();
+        if (foodPage.isEmpty()) throw new NoFoodException();
+
+        return foodPage.getContent();
     }
 
     /**

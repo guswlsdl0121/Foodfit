@@ -39,8 +39,8 @@ spring:
 logging:
   level:
     org.hibernate.SQL: DEBUG
-
-
+    io.micrometer.core.instrument.MeterRegistry: DEBUG
 
 jwt:
   secret: ${jwt.secret}
+
