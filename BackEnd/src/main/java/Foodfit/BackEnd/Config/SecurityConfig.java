@@ -28,11 +28,13 @@ public class SecurityConfig{
     private final PrincipalOauth2UserService oauth2UserService;
     private final AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
 
+    private final CorsConfigurationSource corsConfigurationSource;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(cors-> cors.configurationSource(corsConfigurationSource()))
+                .cors(cors-> cors.configurationSource(corsConfigurationSource))
                 .authorizeHttpRequests((authorizeHttpRequest)->{
                     authorizeHttpRequest
                             .requestMatchers("/api/health-check").authenticated()
@@ -59,18 +61,4 @@ public class SecurityConfig{
                 .build();
     }
 
-
-    private CorsConfigurationSource corsConfigurationSource(){
-        CorsConfiguration corsConfiguration = new CorsConfiguration();
-
-        corsConfiguration.addAllowedOriginPattern("*");
-        corsConfiguration.addAllowedHeader("*");
-        corsConfiguration.addAllowedMethod("*");
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-
-        source.registerCorsConfiguration("/**", corsConfiguration);
-
-        return source;
-    }
 }
