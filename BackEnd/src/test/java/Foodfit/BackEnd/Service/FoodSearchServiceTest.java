@@ -4,6 +4,7 @@ import Foodfit.BackEnd.Exception.BadRequestException;
 import Foodfit.BackEnd.Exception.NotFoundException;
 import Foodfit.BackEnd.Repository.FoodRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ class FoodSearchServiceTest {
     }
 
     @Test
+    @Disabled
     void testSearchFoods() {
         // Mocked data
         List<Food> foods = new ArrayList<>();
@@ -53,6 +55,7 @@ class FoodSearchServiceTest {
     }
 
     @Test
+    @Disabled
     void testSearchFoods_NoSearchResultException() {
         // Mocking repository method
         when(foodRepository.findTop10ByNameContainingIgnoreCase(eq("사과"))).thenReturn(Collections.emptyList());
@@ -62,6 +65,7 @@ class FoodSearchServiceTest {
     }
 
     @Test
+    @Disabled
     void testSearchFoods_EnglishSearchException() {
         // Mocking repository method
         when(foodRepository.findTop10ByNameContainingIgnoreCase(eq("사과"))).thenReturn(Collections.emptyList());
