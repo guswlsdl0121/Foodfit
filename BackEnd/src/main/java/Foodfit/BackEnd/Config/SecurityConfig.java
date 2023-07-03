@@ -23,9 +23,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @RequiredArgsConstructor
 public class SecurityConfig{
 
-    @Value("${security.origin.client}")
-    private String CLEINT_ORIGIN;
-
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     private final PrincipalOauth2UserService oauth2UserService;
@@ -66,10 +63,9 @@ public class SecurityConfig{
     private CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration corsConfiguration = new CorsConfiguration();
 
-        corsConfiguration.addAllowedOrigin(CLEINT_ORIGIN);
+        corsConfiguration.addAllowedOriginPattern("*");
         corsConfiguration.addAllowedHeader("*");
         corsConfiguration.addAllowedMethod("*");
-        corsConfiguration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
