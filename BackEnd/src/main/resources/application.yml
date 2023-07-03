@@ -46,3 +46,6 @@ logging:
 jwt:
   secret: ${jwt.secret}
 
+security:
+  origin:
+    client: ${security.origin.client}
