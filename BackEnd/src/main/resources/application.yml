@@ -36,6 +36,8 @@ spring:
             user-name-attribute: id
 
 
+
+
 logging:
   level:
     org.hibernate.SQL: DEBUG

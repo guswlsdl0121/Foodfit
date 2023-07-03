@@ -30,7 +30,8 @@ public class SecurityConfig{
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .csrf((csrf)->csrf.disable())
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorizeHttpRequest)->{
                     authorizeHttpRequest
                             .requestMatchers("/api/health-check").authenticated()
@@ -56,6 +57,4 @@ public class SecurityConfig{
                 .addFilterAfter(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
-
-
 }
