@@ -30,7 +30,8 @@ import java.util.List;
 public class AnalysisController {
     private final AnalysisService analysisService;
 
-    @Operation(summary = "일일분석")
+    @Operation(summary = "일일 분석", description="로그인이 되어 있어야 합니다.\n" +
+            "각 영양분의 일일 권장량과 오늘 하루 섭취한 영양분 분량이 있습니다.")
     @GetMapping("/daily")
     @AdditionalUserInfoCheck
     public ResponseEntity<DailyAnalysisDTO> makeDailyAnalysis(HttpServletRequest request) {
