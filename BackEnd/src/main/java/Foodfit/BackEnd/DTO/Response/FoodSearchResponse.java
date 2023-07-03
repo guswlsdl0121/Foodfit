@@ -1,10 +1,11 @@
 package Foodfit.BackEnd.DTO.Response;
 
+import Foodfit.BackEnd.DTO.FoodDTO;
+
 import java.util.List;
 
 
 
-public record FoodSearchResponse(int count, List<FoodDTO> searchlist) {
-    public record FoodDTO(Long id, String name, double calorie, double protein, double fat, double salt) {}
+public record FoodSearchResponse(int count, List<FoodDTO> searchList) {
 }
 
