@@ -6,14 +6,46 @@ spring:
     username: ${spring.datasource.username}
     password: ${spring.datasource.password}
 
-
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     properties:
       hibernate:
         format_sql: true
+    open-in-view: false
+
+  security: ## OAuth2 관련 변수
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-id : ${spring.security.oauth2.client.registration.kakao.client-id}
+            client-secret : ${spring.security.oauth2.client.registration.kakao.client-secret}
+            scope:
+              - profile_nickname
+              - account_email
+            client-name: Kakao
+            authorization-grant-type: authorization_code
+            client-authentication-method: client_secret_post
+            redirect-uri: ${spring.security.oauth2.client.registration.kakao.redirect-uri}
+        provider:
+          kakao:
+            authorization-uri: ${spring.security.oauth2.client.provider.kakao.authorization-uri}
+            token-uri: ${spring.security.oauth2.client.provider.kakao.token-uri}
+            user-info-uri: ${spring.security.oauth2.client.provider.kakao.user-info-uri}
+            user-name-attribute: id
+
+
+
 
 logging:
   level:
     org.hibernate.SQL: DEBUG
+    io.micrometer.core.instrument.MeterRegistry: DEBUG
+
+jwt:
+  secret: ${jwt.secret}
+
+security:
+  origin:
+    client: ${security.origin.client}
