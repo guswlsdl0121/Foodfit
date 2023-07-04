@@ -36,12 +36,13 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         String accessToken = jwtTokenProvider.generateAccessToken(findUser);
         String refreshToken = jwtTokenProvider.generateRefreshToken(findUser);
 
-        response.addHeader(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", accessToken));
-        response.addCookie(new Cookie("refresh-token", refreshToken));
+        //response.addHeader(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", accessToken));
+        //response.addCookie(new Cookie("refresh-token", refreshToken));
 
         //개발 편리성을 위한 log
         log.info("사용자 Access 토큰 : {} ", accessToken);
 
-        getRedirectStrategy().sendRedirect(request, response, "/");
+        getRedirectStrategy().sendRedirect(request, response, String.format("/?token=%s&additional-info=%s", accessToken, findUser.isAdditionalDataNeed().toString()));
+
     }
 }
