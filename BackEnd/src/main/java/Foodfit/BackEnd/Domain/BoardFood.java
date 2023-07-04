@@ -1,14 +1,16 @@
 package Foodfit.BackEnd.Domain;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Table(name = "board_foods")
+@Builder
+@Getter
 public class BoardFood {
 
     @Id
@@ -18,6 +20,7 @@ public class BoardFood {
 
     @ManyToOne
     @JoinColumn(name = "board_id", referencedColumnName = "board_id")
+    @OnDelete(action= OnDeleteAction.CASCADE)
     private Board board;
 
     @ManyToOne
