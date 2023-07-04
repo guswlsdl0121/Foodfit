@@ -5,12 +5,10 @@ import Foodfit.BackEnd.Domain.User;
 import Foodfit.BackEnd.Repository.UserRepository;
 import Foodfit.BackEnd.Utils.JwtTokenProvider;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -42,7 +40,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         //개발 편리성을 위한 log
         log.info("사용자 Access 토큰 : {} ", accessToken);
 
-        getRedirectStrategy().sendRedirect(request, response, String.format("/?token=%s&additional-info=%s", accessToken, findUser.isAdditionalDataNeed().toString()));
+        getRedirectStrategy().sendRedirect(request, response, String.format("http://localhost:3000/?token=%s&additional-info=%s", accessToken, findUser.isAdditionalDataNeed().toString()));
 
     }
 }
