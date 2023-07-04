@@ -45,7 +45,7 @@ public class BoardController {
     public ResponseEntity userLike(HttpServletRequest req, @RequestBody UserLikeRequest reqBody){
         UserDTO user = (UserDTO) req.getAttribute("user");
 
-        addBoardService.updateLike(user.getId(), reqBody.getBoardId() ,reqBody.isLikeClicked());
+        addBoardService.updateLike(reqBody.getBoardId(),user.getId() ,reqBody.isLikeClicked());
         return new ResponseEntity(HttpStatus.OK);
     }
 
