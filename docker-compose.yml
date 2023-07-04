@@ -24,12 +24,12 @@ services:
     container_name: frontend
     build:
       context: .
-      dockerfile: ./Frontend/Dockerfile
+      dockerfile: ./FrontEnd/Dockerfile
     ports:
       - 80:80
     volumes:
-      - ./Frontend/build:/app/build
-      - ./Frontend/nginx.conf:/etc/nginx/conf.d/nginx.conf
+      - ./FrontEnd/build:/app/build
+      - ./FrontEnd/nginx.conf:/etc/nginx/conf.d/nginx.conf
     command: nginx -g 'daemon off;'
     depends_on:
       - backend
