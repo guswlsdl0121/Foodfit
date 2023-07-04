@@ -1,4 +1,4 @@
-package Foodfit.BackEnd.Service.Controller;
+package Foodfit.BackEnd.Controller;
 
 import Foodfit.BackEnd.DTO.FoodDTO;
 import Foodfit.BackEnd.DTO.Response.FoodSearchResponse;
