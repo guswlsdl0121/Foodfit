@@ -1,7 +1,6 @@
 package Foodfit.BackEnd.food;
 
 import Foodfit.BackEnd.DTO.DailyAnalysisDTO;
-import Foodfit.BackEnd.DTO.PeriodAnalysisDTO;
 import Foodfit.BackEnd.DTO.UserDTO;
 import Foodfit.BackEnd.Domain.Food;
 import Foodfit.BackEnd.Domain.Gender;
@@ -11,7 +10,6 @@ import Foodfit.BackEnd.Repository.UserFoodRepository;
 import Foodfit.BackEnd.Repository.UserRepository;
 import Foodfit.BackEnd.Service.AnalysisService;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -19,7 +17,6 @@ import org.mockito.Mock;
 
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

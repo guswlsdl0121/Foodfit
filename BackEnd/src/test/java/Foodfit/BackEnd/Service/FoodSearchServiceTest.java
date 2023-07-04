@@ -1,7 +1,6 @@
 package Foodfit.BackEnd.Service;
 import Foodfit.BackEnd.Domain.Food;
 import Foodfit.BackEnd.Exception.BadRequestException;
-import Foodfit.BackEnd.Exception.NotFoundException;
 import Foodfit.BackEnd.Repository.FoodRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
