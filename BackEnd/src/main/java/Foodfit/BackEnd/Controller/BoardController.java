@@ -1,7 +1,9 @@
 package Foodfit.BackEnd.Controller;
 
 import Foodfit.BackEnd.Aop.Annotations.AdditionalUserInfoCheck;
+import Foodfit.BackEnd.Aop.Annotations.LoginCheck;
 import Foodfit.BackEnd.DTO.Request.AddBoardDTO;
+import Foodfit.BackEnd.DTO.Request.UserLikeRequest;
 import Foodfit.BackEnd.DTO.UserDTO;
 import Foodfit.BackEnd.Service.AddBoardService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -36,6 +38,15 @@ public class BoardController {
 
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PostMapping("like")
+    @LoginCheck
+    public ResponseEntity userLike(HttpServletRequest req, @RequestBody UserLikeRequest reqBody){
+        UserDTO user = (UserDTO) req.getAttribute("user");
+
+        addBoardService.updateLike(user.getId(), reqBody.getBoardId() ,reqBody.isLikeClicked());
+        return new ResponseEntity(HttpStatus.OK);
     }
 
 }
