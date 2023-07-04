@@ -1,5 +1,6 @@
 package Foodfit.BackEnd.Service;
 
+
 import Foodfit.BackEnd.Domain.Board;
 import Foodfit.BackEnd.Domain.Like;
 import Foodfit.BackEnd.Domain.User;
@@ -9,22 +10,19 @@ import Foodfit.BackEnd.Repository.BoardRepository;
 import Foodfit.BackEnd.Repository.LikeRepository;
 import Foodfit.BackEnd.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+
+//TODO : Migrate to BoardService
 @Service
 @RequiredArgsConstructor
-@Slf4j
-public class AddBoardService {
-    private final BoardRepository boardRepository;
+public class MinseokBoardService {
+
     private final LikeRepository likeRepository;
     private final UserRepository userRepository;
-
-//    @Transactional
-//    public void addBoard()
+    private final BoardRepository boardRepository;
 
     public void updateLike(Long boardId, Long userId, boolean userLike) {
         final Like like = findUserLiked(boardId, userId);
@@ -50,14 +48,12 @@ public class AddBoardService {
     }
 
     /*
-     * author : minturtle
-     * description : 사용자가 Board에 대해 좋아요를 눌렀는지 알 수 있는 메서드
-     * */
+    * author : minturtle
+    * description : 사용자가 Board에 대해 좋아요를 눌렀는지 알 수 있는 메서드
+    * */
     public Like findUserLiked(Long boardId, Long userId){
         Optional<Like> findLike = likeRepository.findLikeByBoard_IdAndUser_Id(boardId, userId);
 
         return findLike.orElse(null);
     }
-
-
 }
