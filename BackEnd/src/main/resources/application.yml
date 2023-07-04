@@ -2,7 +2,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     #/<IP>:<PORT>/<DB NAME>?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
-    url:
+    url: jdbc:mysql://localhost:3307/foodfit?serverTimezone=Asia/Seoul
     username: ${spring.datasource.username}
     password: ${spring.datasource.password}
 

@@ -6,6 +6,7 @@ import Foodfit.BackEnd.DTO.Request.AddBoardDTO;
 import Foodfit.BackEnd.DTO.Request.UserLikeRequest;
 import Foodfit.BackEnd.DTO.UserDTO;
 import Foodfit.BackEnd.Service.AddBoardService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -40,12 +41,14 @@ public class BoardController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+
+    @Operation(description = "유저가 좋아요를 누르면, likeClicked 에 true를, 좋아요를 취소하면 false를 넣어서 보내주시면 됩니다.")
     @PostMapping("like")
     @LoginCheck
     public ResponseEntity userLike(HttpServletRequest req, @RequestBody UserLikeRequest reqBody){
         UserDTO user = (UserDTO) req.getAttribute("user");
 
-        addBoardService.updateLike(user.getId(), reqBody.getBoardId() ,reqBody.isLikeClicked());
+        addBoardService.updateLike(reqBody.getBoardId(),user.getId() ,reqBody.isLikeClicked());
         return new ResponseEntity(HttpStatus.OK);
     }
 
