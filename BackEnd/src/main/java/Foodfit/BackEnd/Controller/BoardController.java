@@ -1,13 +1,13 @@
 package Foodfit.BackEnd.Controller;
 
-import Foodfit.BackEnd.Aop.Annotations.AdditionalUserInfoCheck;
 import Foodfit.BackEnd.Aop.Annotations.LoginCheck;
 import Foodfit.BackEnd.DTO.Request.AddBoardDTO;
 import Foodfit.BackEnd.DTO.Request.DeleteBoardRequest;
 import Foodfit.BackEnd.DTO.Request.UpdateBoardRequest;
 import Foodfit.BackEnd.DTO.Request.UserLikeRequest;
 import Foodfit.BackEnd.DTO.UserDTO;
-import Foodfit.BackEnd.Service.AddBoardService;
+import Foodfit.BackEnd.Service.BoardLikeService;
+import Foodfit.BackEnd.Service.BoardService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,7 +27,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class BoardController {
-    private final AddBoardService addBoardService;
+    private final BoardService boardService;
+    private final BoardLikeService boardLikeService;
 
     @Operation(summary = "게시글 작성", description="로그인이 되어 있어야 합니다.\n" +
             "내용, 이미지, 태그를 보내주어야 합니다.")
@@ -39,7 +40,7 @@ public class BoardController {
         List<MultipartFile> images = addBoardDTO.toImageList();
         List<Long> foodIds = addBoardDTO.toFoodIdList();
 
-        addBoardService.createBoard(content, images, foodIds, userId);
+        boardService.createBoard(content, images, foodIds, userId);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -55,7 +56,7 @@ public class BoardController {
         List<MultipartFile> images = reqBody.toImageList();
         List<Long> foodIds = reqBody.toFoodIdList();
 
-        addBoardService.updateBoard(boardId, content, images, foodIds, userId);
+        boardService.updateBoard(boardId, content, images, foodIds, userId);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -67,12 +68,10 @@ public class BoardController {
     public ResponseEntity<Void> deleteBoard(@RequestBody DeleteBoardRequest reqBody, HttpServletRequest request) {
         Long userId = ((UserDTO) request.getAttribute("user")).getId();
 
-        addBoardService.deleteBoard(reqBody.getBoardId(), userId);
+        boardService.deleteBoard(reqBody.getBoardId(), userId);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
-
-
 
     @Operation(description = "유저가 좋아요를 누르면, likeClicked 에 true를, 좋아요를 취소하면 false를 넣어서 보내주시면 됩니다.")
     @PostMapping("like")
@@ -80,8 +79,7 @@ public class BoardController {
     public ResponseEntity userLike(HttpServletRequest req, @RequestBody UserLikeRequest reqBody){
         UserDTO user = (UserDTO) req.getAttribute("user");
 
-        addBoardService.updateLike(reqBody.getBoardId(),user.getId() ,reqBody.isLikeClicked());
+        boardLikeService.updateLike(reqBody.getBoardId(),user.getId() ,reqBody.isLikeClicked());
         return new ResponseEntity(HttpStatus.OK);
     }
-
 }
