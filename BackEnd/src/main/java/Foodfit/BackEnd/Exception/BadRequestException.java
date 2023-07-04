@@ -10,5 +10,6 @@ public class BadRequestException extends RuntimeException {
             super("검색은 한글로 하셔야 합니다.");
         }
     }
+
 }
 
