@@ -2,20 +2,21 @@ package Foodfit.BackEnd.Config;
 
 import Foodfit.BackEnd.Filter.JwtAuthenticationFilter;
 import Foodfit.BackEnd.Service.PrincipalOauth2UserService;
-import Foodfit.BackEnd.Utils.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -27,11 +28,13 @@ public class SecurityConfig{
     private final PrincipalOauth2UserService oauth2UserService;
     private final AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
 
+    private final CorsConfigurationSource corsConfigurationSource;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(AbstractHttpConfigurer::disable)
+                .cors(cors-> cors.configurationSource(corsConfigurationSource))
                 .authorizeHttpRequests((authorizeHttpRequest)->{
                     authorizeHttpRequest
                             .requestMatchers("/api/health-check").authenticated()
@@ -57,4 +60,5 @@ public class SecurityConfig{
                 .addFilterAfter(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
+
 }
