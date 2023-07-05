@@ -1,7 +1,7 @@
 package Foodfit.BackEnd.Controller;
 
 import Foodfit.BackEnd.Aop.Annotations.LoginCheck;
-import Foodfit.BackEnd.DTO.DailyAnalysisDTO;
+import Foodfit.BackEnd.DTO.AnalysisDTO;
 import Foodfit.BackEnd.DTO.Response.BoardDTO;
 import Foodfit.BackEnd.DTO.Response.BoardListResponse;
 import Foodfit.BackEnd.DTO.UserDTO;
@@ -33,10 +33,7 @@ public class BoardListController {
     }
 
     @GetMapping("/{boardId}/nutrient")
-    public ResponseEntity<DailyAnalysisDTO> getBoardNutrient(@PathVariable Long boardId) {
-        // boardId를 이용하여 게시글의 영양 정보를 조회하고, 결과를 문자열로 반환하는 로직을 구현해야 합니다.
-        // 예시로 "영양 정보입니다."라는 문자열을 반환하도록 작성하겠습니다.
-
+    public ResponseEntity<AnalysisDTO> getBoardNutrient(@PathVariable Long boardId) {
         return ResponseEntity.ok(boardListService.getNutrientInfo(boardId));
     }
 

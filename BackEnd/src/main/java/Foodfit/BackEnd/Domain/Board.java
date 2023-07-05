@@ -1,10 +1,12 @@
 package Foodfit.BackEnd.Domain;
 
+import Foodfit.BackEnd.DTO.TotalNutrient;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static Foodfit.BackEnd.Exception.NotFoundException.*;
@@ -96,21 +98,15 @@ public class Board {
                 .anyMatch(like -> like.getUser().getId().equals(userId));
     }
 
-    public List<? extends Number> calculateTotalNutrients() {
-        int totalCalorie = 0;
-        double totalProtein = 0.0;
-        double totalFat = 0.0;
-        double totalSalt = 0.0;
-
-        for (BoardFood boardFood : boardFoods) {
-            Food food = boardFood.getFood();
-            if (food == null) throw new NoFoodException();
-
-            totalCalorie += food.getCalorie();
-            totalProtein += food.getProtein();
-            totalFat += food.getFat();
-            totalSalt += food.getSalt();
-        }
-        return List.of(totalCalorie, totalProtein, totalFat, totalSalt);
+    /**
+     * 영양분의 총합 계산
+     * @return boolean
+     */
+    public TotalNutrient calculateTotalNutrients() {
+        return boardFoods.stream()
+                .map(BoardFood::getFood)
+                .filter(Objects::nonNull)
+                .map(food -> new TotalNutrient(food.getCalorie(), food.getProtein(), food.getFat(), food.getSalt()))
+                .reduce(new TotalNutrient(0, 0.0, 0.0, 0.0), TotalNutrient::add);
     }
 }

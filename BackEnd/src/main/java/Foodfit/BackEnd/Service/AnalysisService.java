@@ -1,6 +1,6 @@
 package Foodfit.BackEnd.Service;
 
-import Foodfit.BackEnd.DTO.DailyAnalysisDTO;
+import Foodfit.BackEnd.DTO.AnalysisDTO;
 import Foodfit.BackEnd.DTO.PeriodAnalysisDTO;
 import Foodfit.BackEnd.DTO.UserDTO;
 import Foodfit.BackEnd.Domain.Food;
@@ -36,7 +36,7 @@ public class AnalysisService {
      * @param  userDTO
      * @return DailyAnalysisDTO
      */
-    public DailyAnalysisDTO getDailyAnalysis(UserDTO userDTO){
+    public AnalysisDTO getDailyAnalysis(UserDTO userDTO){
         try {
             LocalDate today = LocalDate.now();
             LocalDateTime todayStart = LocalDateTime.of(today, LocalTime.MIN);
@@ -53,7 +53,7 @@ public class AnalysisService {
         }
     }
 
-    private DailyAnalysisDTO calculateDailyAnalysis(List<UserFood> userFoods) {
+    private AnalysisDTO calculateDailyAnalysis(List<UserFood> userFoods) {
         int totalCalorie = 0;
         double totalProtein = 0.0;
         double totalFat = 0.0;
@@ -71,7 +71,7 @@ public class AnalysisService {
             totalSalt += Math.round(food.getSalt() * weightRatio);
         }
 
-        return new DailyAnalysisDTO(totalCalorie, totalProtein, totalFat, totalSalt);
+        return new AnalysisDTO(totalCalorie, totalProtein, totalFat, totalSalt);
     }
 
     /**
