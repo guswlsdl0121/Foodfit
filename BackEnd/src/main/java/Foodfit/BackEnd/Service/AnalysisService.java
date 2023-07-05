@@ -46,28 +46,32 @@ public class AnalysisService {
 
             List<UserFood> userFoods = userFoodRepository.findByUserAndDateBetween(user, todayStart, todayEnd);
 
-
-            int totalCalorie = 0;
-            double totalProtein = 0.0;
-            double totalFat = 0.0;
-            double totalSalt = 0.0;
-
-            for (UserFood userFood : userFoods) {
-                Food food = userFood.getFood();
-                if (food == null) throw new NoFoodException();
-
-                double weightRatio = userFood.getWeight() / 100;
-
-                totalCalorie += food.getCalorie() * weightRatio;
-                totalProtein += Math.round(food.getProtein() * weightRatio);
-                totalFat += Math.round(food.getFat() * weightRatio);
-                totalSalt += Math.round(food.getSalt() * weightRatio);
-            }
-            return new DailyAnalysisDTO(totalCalorie, totalProtein, totalFat, totalSalt);
+            return calculateDailyAnalysis(userFoods);
         } catch(NoUserException | NoFoodException e){
             databaseLogger.saveLog(e);
             return null;
         }
+    }
+
+    private DailyAnalysisDTO calculateDailyAnalysis(List<UserFood> userFoods) {
+        int totalCalorie = 0;
+        double totalProtein = 0.0;
+        double totalFat = 0.0;
+        double totalSalt = 0.0;
+
+        for (UserFood userFood : userFoods) {
+            Food food = userFood.getFood();
+            if (food == null) throw new NoFoodException();
+
+            double weightRatio = userFood.getWeight() / 100;
+
+            totalCalorie += food.getCalorie() * weightRatio;
+            totalProtein += Math.round(food.getProtein() * weightRatio);
+            totalFat += Math.round(food.getFat() * weightRatio);
+            totalSalt += Math.round(food.getSalt() * weightRatio);
+        }
+
+        return new DailyAnalysisDTO(totalCalorie, totalProtein, totalFat, totalSalt);
     }
 
     /**
