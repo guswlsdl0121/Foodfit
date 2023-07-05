@@ -87,7 +87,6 @@ class BoardServiceTest {
         when(boardImageRepository.findById(board.getId())).thenReturn(Optional.of(boardImage));
         when(boardFoodRepository.findById(board.getId())).thenReturn(Optional.of(boardFood));
 
-        BoardService boardService = new BoardService( boardFoodRepository, boardImageRepository, boardRepository,  likeRepository, userRepository, foodRepository);
         assertDoesNotThrow(() -> boardService.createBoard(content, images, foodIds, userId));
 
 

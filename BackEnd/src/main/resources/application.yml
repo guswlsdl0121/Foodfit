@@ -1,4 +1,13 @@
 spring:
+  profiles:
+    active: local
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: local
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     #/<IP>:<PORT>/<DB NAME>?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
