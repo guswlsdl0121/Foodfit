@@ -3,6 +3,7 @@ package Foodfit.BackEnd.food;
 
 import Foodfit.BackEnd.Domain.Food;
 import Foodfit.BackEnd.Repository.FoodRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,13 @@ public class FoodRepositoryTest {
 
     @Autowired
     private FoodRepository foodRepository;
+    private List<Food> dummyData;
 
+    @BeforeEach
+    public void setup(){
+        dummyData = createDummyData();
+        foodRepository.saveAll(dummyData);
+    }
 
     @Test
     @DisplayName("foodRepository 초기화 확인")
@@ -31,8 +38,6 @@ public class FoodRepositoryTest {
     @DisplayName("한글로 최대 10개의 음식을 검색할 수 있다.")
     void t2() throws Exception {
         //given
-        List<Food> dummyData = createDummyData();
-        foodRepository.saveAll(dummyData);
 
         //when
         List<Food> findFoods = foodRepository.findTop10ByNameContainingIgnoreCase("사과");
@@ -51,13 +56,32 @@ public class FoodRepositoryTest {
     @DisplayName("검색 결과가 없을 경우 빈 리스트가 넘어온다.")
     void t3() throws Exception {
         //given
-        List<Food> dummyData = createDummyData();
-        foodRepository.saveAll(dummyData);
+
         //when
         List<Food> findFoods = foodRepository.findTop10ByNameContainingIgnoreCase("포도");
         //then
         assertThat(findFoods).isEmpty();
     }
+
+    @Test
+    @DisplayName("FOOD ID 리스트로 FOOD를 일괄 검색할 수 있다.")
+    void t4() throws Exception {
+        //given
+        // 임의의 food 세개 추출
+        Food food1 = dummyData.get(0);
+        Food food2 = dummyData.get(2);
+        Food food3 = dummyData.get(4);
+
+        List<Long> idLists = List.of(food1.getId(), food2.getId(), food3.getId());
+
+        //when
+        List<Food> findFoods = foodRepository.findAllByIdIn(idLists);
+        //then
+        assertThat(findFoods).hasSize(3)
+                .containsExactlyInAnyOrder(food1, food2, food3);
+
+    }
+
 
     private List<Food> createDummyData(){
         Food food1 = Food.builder()
