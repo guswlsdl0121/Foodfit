@@ -1,5 +1,7 @@
 package Foodfit.BackEnd.Service;
 
+import Foodfit.BackEnd.DTO.Response.BoardDTO;
+import Foodfit.BackEnd.DTO.Response.BoardListResponse;
 import Foodfit.BackEnd.Domain.*;
 import Foodfit.BackEnd.Exception.AuthorizeExceptionMessages;
 import Foodfit.BackEnd.Exception.NotFoundException.NoUserException;
@@ -16,7 +18,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -90,7 +92,6 @@ public class BoardService {
      * author : junha
      * description : 업로드한 이미지를 boardImage List로 생성하는 메서드
      * */
-    @Transactional(readOnly = true)
     private List<BoardImage> createBoardImageList(List<MultipartFile> images, Board board) throws IOException {
         List<BoardImage> boardImages = new ArrayList<>();
 
@@ -128,8 +129,4 @@ public class BoardService {
 
         return boardFoods;
     }
-
-
-
-
 }

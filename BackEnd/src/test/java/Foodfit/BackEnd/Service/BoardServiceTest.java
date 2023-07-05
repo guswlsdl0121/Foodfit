@@ -62,7 +62,7 @@ class BoardServiceTest {
         Long userId = 1L; // 사용자 ID
         User user = new User(userId, "testuser", 25, Gender.MALE, 1234L, null);
 
-        String content = "Test board content";
+        String content = "Test boardList content";
         List<MultipartFile> images = new ArrayList<>(); // 이미지 목록 생성
         List<Long> foodIds = Arrays.asList(1L, 2L, 3L); // 음식 ID 목록 생성
         Food food = foodRepository.findById(1L).get();

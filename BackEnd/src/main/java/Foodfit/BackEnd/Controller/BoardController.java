@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 
+
 @Tag(name = "게시판 API", description = "게시글 추가, 조회, 삭제, 좋아요를 담당합니다.")
 @RestController
 @RequestMapping("/api/board")
