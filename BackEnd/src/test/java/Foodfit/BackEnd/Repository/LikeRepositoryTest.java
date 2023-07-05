@@ -66,7 +66,7 @@ class LikeRepositoryTest {
     void t2() throws Exception {
         //given
         //when
-        final Like like = likeRepository.findLikeByBoard_IdAndUser_Id(dummyBoard.getId(), dummyUser.getId())
+        Like like = likeRepository.findLikeByBoard_IdAndUser_Id(dummyBoard.getId(), dummyUser.getId())
                 .orElseThrow(RuntimeException::new);
         //then
         assertThat(like)
@@ -75,6 +75,17 @@ class LikeRepositoryTest {
 
     }
 
+
+    @Test
+    @DisplayName("board id와 user id로 좋아요를 눌렀는지 확인할 수 있다. 좋아요를 눌렀다면 Optional.empty가 리턴된다.")
+    void t3() throws Exception {
+        //given
+        //when
+        Optional<Like> optionalLike = likeRepository
+                .findLikeByBoard_IdAndUser_Id(dummyBoard.getId(), dummyUser3.getId());
+        //then
+        assertThat(optionalLike.isEmpty()).isTrue();
+    }
 
 
     private void initializeDummyUserAndBoard(){
