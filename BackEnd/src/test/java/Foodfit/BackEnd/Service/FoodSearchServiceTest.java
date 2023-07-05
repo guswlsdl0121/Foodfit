@@ -63,6 +63,7 @@ class FoodSearchServiceTest {
         assertThrows(NoFoodException.class, () -> foodSearchService.searchFoods("사과"));
     }
 
+<<<<<<< Updated upstream
     @Test
     @Disabled
     void testSearchFoods_EnglishSearchException() {
@@ -72,4 +73,14 @@ class FoodSearchServiceTest {
         // Calling the method to be tested and asserting the exception
         assertThrows(BadRequestException.EnglishSearchException.class, () -> foodSearchService.searchFoods("apple"));
     }
+=======
+//    @Test
+//    void testSearchFoods_EnglishSearchException() {
+//        // Mocking repository method
+//        when(foodRepository.findTop10ByNameContainingIgnoreCase(eq("사과"))).thenReturn(Collections.emptyList());
+//
+//        // Calling the method to be tested and asserting the exception
+//        assertThrows(BadRequestException.EnglishSearchException.class, () -> foodSearchService.searchFoods("apple"));
+//    }
+>>>>>>> Stashed changes
 }

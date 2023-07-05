@@ -16,4 +16,10 @@ public class NotFoundException extends RuntimeException {
             super("사용자를 찾을 수 없습니다.");
         }
     }
+
+    public static class NoBoardException extends NotFoundException {
+        public NoBoardException() {
+            super("게시글을 찾을 수 없습니다.");
+        }
+    }
 }
