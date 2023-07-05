@@ -1,6 +1,6 @@
 package Foodfit.BackEnd.food;
 
-import Foodfit.BackEnd.DTO.DailyAnalysisDTO;
+import Foodfit.BackEnd.DTO.AnalysisDTO;
 import Foodfit.BackEnd.DTO.UserDTO;
 import Foodfit.BackEnd.Domain.Food;
 import Foodfit.BackEnd.Domain.Gender;
@@ -67,10 +67,10 @@ public class AnalysisServiceTest {
                 .thenReturn(userFoods);
 
         // Expected result
-        DailyAnalysisDTO expected = new DailyAnalysisDTO(1300, 65.0, 34.0, 13.0);
+        AnalysisDTO expected = new AnalysisDTO(1300, 65.0, 34.0, 13.0);
 
         // Perform the method call
-        DailyAnalysisDTO result = analysisService.getDailyAnalysis(userDTO);
+        AnalysisDTO result = analysisService.getDailyAnalysis(userDTO);
 
         // Assertion
         assertEquals(expected, result);

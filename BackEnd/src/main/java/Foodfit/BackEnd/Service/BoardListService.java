@@ -1,7 +1,8 @@
 package Foodfit.BackEnd.Service;
 
-import Foodfit.BackEnd.DTO.DailyAnalysisDTO;
+import Foodfit.BackEnd.DTO.AnalysisDTO;
 import Foodfit.BackEnd.DTO.Response.BoardDTO;
+import Foodfit.BackEnd.DTO.TotalNutrient;
 import Foodfit.BackEnd.Domain.Board;
 import Foodfit.BackEnd.Repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ public class BoardListService {
     private final BoardRepository boardRepository;
     /*
      * author: guswls
-     * description: 로그인하지 않은 사용자를 위한 boardList를 반환하는 메서드
+     * description: boardList를 반환하는 메서드
      */
     public List<BoardDTO> getBoardList(Long userId) {
         List<Board> boards = boardRepository.findAll();
@@ -50,19 +51,21 @@ public class BoardListService {
         return BoardDTO.toDTO(board, isLike, tags);
     }
 
-    public DailyAnalysisDTO getNutrientInfo(Long boardId) {
+    /*
+     * author: guswls
+     * description: 게시글의 태그를 토대로 영양분 가져오기
+     */
+    public AnalysisDTO getNutrientInfo(Long boardId) {
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(NoBoardException::new);
 
-        List<? extends Number> nutrientList = board.calculateTotalNutrients();
+        TotalNutrient totalNutrient = board.calculateTotalNutrients();
 
-        int totalCalorie = nutrientList.get(0).intValue();
-        double totalProtein = nutrientList.get(1).doubleValue();
-        double totalFat = nutrientList.get(2).doubleValue();
-        double totalSalt = nutrientList.get(3).doubleValue();
+        int totalCalorie = totalNutrient.totalCalorie();
+        double totalProtein = totalNutrient.totalProtein();
+        double totalFat = totalNutrient.totalFat();
+        double totalSalt = totalNutrient.totalSalt();
 
-        return new DailyAnalysisDTO(totalCalorie, totalProtein, totalFat, totalSalt);
+        return new AnalysisDTO(totalCalorie, totalProtein, totalFat, totalSalt);
     }
-
-
 }
