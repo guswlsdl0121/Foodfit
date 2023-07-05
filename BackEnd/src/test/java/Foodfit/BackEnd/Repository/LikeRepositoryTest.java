@@ -77,7 +77,7 @@ class LikeRepositoryTest {
 
 
     @Test
-    @DisplayName("board id와 user id로 좋아요를 눌렀는지 확인할 수 있다. 좋아요를 눌렀다면 Optional.empty가 리턴된다.")
+    @DisplayName("board id와 user id로 좋아요를 눌렀는지 확인할 수 있다. 좋아요를 누르지 않았다면 Optional.empty가 리턴된다.")
     void t3() throws Exception {
         //given
         //when
@@ -85,6 +85,16 @@ class LikeRepositoryTest {
                 .findLikeByBoard_IdAndUser_Id(dummyBoard.getId(), dummyUser3.getId());
         //then
         assertThat(optionalLike.isEmpty()).isTrue();
+    }
+
+    @Test
+    @DisplayName("board_id로 게시글에 눌린 좋아요의 갯수를 알 수 있다.")
+    void t4() throws Exception {
+        //given
+        //when
+        Long likeCount = likeRepository.countLikeByBoard_Id(dummyBoard.getId());
+        //then
+        assertThat(likeCount).isEqualTo(2);
     }
 
 
