@@ -63,6 +63,7 @@ class FoodSearchServiceTest {
         assertThrows(NoFoodException.class, () -> foodSearchService.searchFoods("사과"));
     }
 
+
     @Test
     @Disabled
     void testSearchFoods_EnglishSearchException() {
@@ -72,4 +73,5 @@ class FoodSearchServiceTest {
         // Calling the method to be tested and asserting the exception
         assertThrows(BadRequestException.EnglishSearchException.class, () -> foodSearchService.searchFoods("apple"));
     }
+
 }

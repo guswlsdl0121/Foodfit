@@ -21,9 +21,9 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
-class AddBoardServiceTest {
+class BoardServiceTest {
     @InjectMocks
-    private AddBoardService addBoardService;
+    private BoardService boardService;
 
     @Mock
     private FoodRepository foodRepository;
@@ -53,7 +53,7 @@ class AddBoardServiceTest {
         assertNotNull(boardFoodRepository);
         assertNotNull(userRepository);
         assertNotNull(likeRepository);
-        assertNotNull(addBoardService);
+        assertNotNull(boardService);
     }
 
     @Test
@@ -62,7 +62,7 @@ class AddBoardServiceTest {
         Long userId = 1L; // 사용자 ID
         User user = new User(userId, "testuser", 25, Gender.MALE, 1234L, null);
 
-        String content = "Test board content";
+        String content = "Test boardList content";
         List<MultipartFile> images = new ArrayList<>(); // 이미지 목록 생성
         List<Long> foodIds = Arrays.asList(1L, 2L, 3L); // 음식 ID 목록 생성
         Food food = foodRepository.findById(1L).get();
@@ -87,8 +87,7 @@ class AddBoardServiceTest {
         when(boardImageRepository.findById(board.getId())).thenReturn(Optional.of(boardImage));
         when(boardFoodRepository.findById(board.getId())).thenReturn(Optional.of(boardFood));
 
-        AddBoardService addBoardService = new AddBoardService( boardFoodRepository, boardImageRepository, boardRepository,  likeRepository, userRepository, foodRepository);
-        assertDoesNotThrow(() -> addBoardService.createBoard(content, images, foodIds, userId));
+        assertDoesNotThrow(() -> boardService.createBoard(content, images, foodIds, userId));
 
 
 
