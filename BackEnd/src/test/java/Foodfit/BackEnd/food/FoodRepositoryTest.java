@@ -47,6 +47,17 @@ public class FoodRepositoryTest {
                         "사과 스무디");
     }
 
+    @Test
+    @DisplayName("검색 결과가 없을 경우 빈 리스트가 넘어온다.")
+    void t3() throws Exception {
+        //given
+        List<Food> dummyData = createDummyData();
+        foodRepository.saveAll(dummyData);
+        //when
+        List<Food> findFoods = foodRepository.findTop10ByNameContainingIgnoreCase("포도");
+        //then
+        assertThat(findFoods).isEmpty();
+    }
 
     private List<Food> createDummyData(){
         Food food1 = Food.builder()
