@@ -63,5 +63,10 @@ public class User {
     public void setGender(Gender gender) {
         this.gender = gender;
     }
+
+
+    public Boolean isAdditionalDataNeed(){
+        return ((age == '0') || (gender == null));
+    }
 }
 

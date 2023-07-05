@@ -1,7 +1,6 @@
 package Foodfit.BackEnd.food;
 
-import Foodfit.BackEnd.DTO.DailyAnalysisDTO;
-import Foodfit.BackEnd.DTO.PeriodAnalysisDTO;
+import Foodfit.BackEnd.DTO.AnalysisDTO;
 import Foodfit.BackEnd.DTO.UserDTO;
 import Foodfit.BackEnd.Domain.Food;
 import Foodfit.BackEnd.Domain.Gender;
@@ -11,15 +10,14 @@ import Foodfit.BackEnd.Repository.UserFoodRepository;
 import Foodfit.BackEnd.Repository.UserRepository;
 import Foodfit.BackEnd.Service.AnalysisService;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.context.ActiveProfiles;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@ActiveProfiles("test")
 public class AnalysisServiceTest {
 
     @InjectMocks
@@ -68,10 +67,10 @@ public class AnalysisServiceTest {
                 .thenReturn(userFoods);
 
         // Expected result
-        DailyAnalysisDTO expected = new DailyAnalysisDTO(1300, 65.0, 34.0, 13.0);
+        AnalysisDTO expected = new AnalysisDTO(1300, 65.0, 34.0, 13.0);
 
         // Perform the method call
-        DailyAnalysisDTO result = analysisService.getDailyAnalysis(userDTO);
+        AnalysisDTO result = analysisService.getDailyAnalysis(userDTO);
 
         // Assertion
         assertEquals(expected, result);

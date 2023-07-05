@@ -1,6 +1,6 @@
 package Foodfit.BackEnd.Service;
 
-import Foodfit.BackEnd.DTO.DailyAnalysisDTO;
+import Foodfit.BackEnd.DTO.AnalysisDTO;
 import Foodfit.BackEnd.DTO.PeriodAnalysisDTO;
 import Foodfit.BackEnd.DTO.UserDTO;
 import Foodfit.BackEnd.Domain.Food;
@@ -36,7 +36,7 @@ public class AnalysisService {
      * @param  userDTO
      * @return DailyAnalysisDTO
      */
-    public DailyAnalysisDTO getDailyAnalysis(UserDTO userDTO){
+    public AnalysisDTO getDailyAnalysis(UserDTO userDTO){
         try {
             LocalDate today = LocalDate.now();
             LocalDateTime todayStart = LocalDateTime.of(today, LocalTime.MIN);
@@ -46,28 +46,32 @@ public class AnalysisService {
 
             List<UserFood> userFoods = userFoodRepository.findByUserAndDateBetween(user, todayStart, todayEnd);
 
-
-            int totalCalorie = 0;
-            double totalProtein = 0.0;
-            double totalFat = 0.0;
-            double totalSalt = 0.0;
-
-            for (UserFood userFood : userFoods) {
-                Food food = userFood.getFood();
-                if (food == null) throw new NoFoodException();
-
-                double weightRatio = userFood.getWeight() / 100;
-
-                totalCalorie += food.getCalorie() * weightRatio;
-                totalProtein += Math.round(food.getProtein() * weightRatio);
-                totalFat += Math.round(food.getFat() * weightRatio);
-                totalSalt += Math.round(food.getSalt() * weightRatio);
-            }
-            return new DailyAnalysisDTO(totalCalorie, totalProtein, totalFat, totalSalt);
+            return calculateDailyAnalysis(userFoods);
         } catch(NoUserException | NoFoodException e){
             databaseLogger.saveLog(e);
             return null;
         }
+    }
+
+    private AnalysisDTO calculateDailyAnalysis(List<UserFood> userFoods) {
+        int totalCalorie = 0;
+        double totalProtein = 0.0;
+        double totalFat = 0.0;
+        double totalSalt = 0.0;
+
+        for (UserFood userFood : userFoods) {
+            Food food = userFood.getFood();
+            if (food == null) throw new NoFoodException();
+
+            double weightRatio = userFood.getWeight() / 100;
+
+            totalCalorie += food.getCalorie() * weightRatio;
+            totalProtein += Math.round(food.getProtein() * weightRatio);
+            totalFat += Math.round(food.getFat() * weightRatio);
+            totalSalt += Math.round(food.getSalt() * weightRatio);
+        }
+
+        return new AnalysisDTO(totalCalorie, totalProtein, totalFat, totalSalt);
     }
 
     /**

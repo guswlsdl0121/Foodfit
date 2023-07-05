@@ -1,7 +1,6 @@
 package Foodfit.BackEnd.Service;
 import Foodfit.BackEnd.Domain.Food;
 import Foodfit.BackEnd.Exception.BadRequestException;
-import Foodfit.BackEnd.Exception.NotFoundException;
 import Foodfit.BackEnd.Repository.FoodRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -64,6 +63,7 @@ class FoodSearchServiceTest {
         assertThrows(NoFoodException.class, () -> foodSearchService.searchFoods("사과"));
     }
 
+
     @Test
     @Disabled
     void testSearchFoods_EnglishSearchException() {
@@ -73,4 +73,5 @@ class FoodSearchServiceTest {
         // Calling the method to be tested and asserting the exception
         assertThrows(BadRequestException.EnglishSearchException.class, () -> foodSearchService.searchFoods("apple"));
     }
+
 }
