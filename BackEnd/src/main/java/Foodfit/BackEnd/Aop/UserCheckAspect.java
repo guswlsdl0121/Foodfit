@@ -2,7 +2,7 @@ package Foodfit.BackEnd.Aop;
 
 
 import Foodfit.BackEnd.DTO.UserDTO;
-import Foodfit.BackEnd.Exception.NotFoundException;
+import Foodfit.BackEnd.Exception.UnAuthorizedException;
 import Foodfit.BackEnd.Utils.UserProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +11,6 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 
-import java.util.NoSuchElementException;
 
 @Aspect
 @Component
@@ -32,7 +31,7 @@ public class UserCheckAspect {
 
     @Around("@annotation(Foodfit.BackEnd.Aop.Annotations.AdditionalUserInfoCheck)")
     public Object additionalUserInfoCheck(ProceedingJoinPoint pjp) throws Throwable {
-        UserDTO userDTO = userProvider.getUser().orElseThrow(() -> new NoSuchElementException("유저 정보를 찾을 수 없습니다."));
+        UserDTO userDTO = userProvider.getUser().orElseThrow(() -> new UnAuthorizedException("유저 정보를 찾을 수 없습니다."));
 
         userProvider.verifyIsFieldNotNull(userDTO, UserProvider.UserFields.age, UserProvider.UserFields.gender);
 
@@ -49,7 +48,7 @@ public class UserCheckAspect {
                 continue;
             }
             HttpServletRequest request = (HttpServletRequest) obj;
-            UserDTO userDTO = userProvider.getUser().orElseThrow(() -> new NoSuchElementException("유저 정보를 찾을 수 없습니다."));
+            UserDTO userDTO = userProvider.getUser().orElseThrow(() -> new UnAuthorizedException("유저 정보를 찾을 수 없습니다."));
 
             request.setAttribute("user", userDTO);
 

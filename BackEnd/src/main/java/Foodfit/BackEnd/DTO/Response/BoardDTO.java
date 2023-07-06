@@ -3,6 +3,7 @@ package Foodfit.BackEnd.DTO.Response;
 
 import Foodfit.BackEnd.Domain.Board;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -11,6 +12,7 @@ public record BoardDTO(
         byte[] profileImage,
         String author,
         String description,
+        LocalDateTime date,
         List<String> images,
         boolean isLike,
         int likeCount,
@@ -21,6 +23,7 @@ public record BoardDTO(
                 board.getAuthorProfileImage(),
                 board.getAuthorName(),
                 board.getContent(),
+                board.getDate(),
                 byteToUrl(board.getImages()),
                 isLikedByUser,
                 board.getLikeCount(),

@@ -1,7 +1,7 @@
 package Foodfit.BackEnd.Controller;
 
 import Foodfit.BackEnd.Aop.Annotations.AdditionalUserInfoCheck;
-import Foodfit.BackEnd.DTO.DailyAnalysisDTO;
+import Foodfit.BackEnd.DTO.AnalysisDTO;
 import Foodfit.BackEnd.DTO.PeriodAnalysisDTO;
 import Foodfit.BackEnd.DTO.Response.PeriodAnalysisResponse;
 import Foodfit.BackEnd.DTO.UserDTO;
@@ -34,9 +34,9 @@ public class AnalysisController {
             "각 영양분의 일일 권장량과 오늘 하루 섭취한 영양분 분량이 있습니다.")
     @GetMapping("/daily")
     @AdditionalUserInfoCheck
-    public ResponseEntity<DailyAnalysisDTO> makeDailyAnalysis(HttpServletRequest request) {
+    public ResponseEntity<AnalysisDTO> makeDailyAnalysis(HttpServletRequest request) {
         UserDTO userDTO = (UserDTO) request.getAttribute("user");
-        DailyAnalysisDTO daily_analysis = analysisService.getDailyAnalysis(userDTO);
+        AnalysisDTO daily_analysis = analysisService.getDailyAnalysis(userDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(daily_analysis);
     }
 
