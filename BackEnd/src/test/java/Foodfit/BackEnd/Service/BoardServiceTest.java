@@ -2,6 +2,7 @@ package Foodfit.BackEnd.Service;
 
 import Foodfit.BackEnd.Domain.*;
 import Foodfit.BackEnd.Repository.*;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -96,6 +97,49 @@ class BoardServiceTest {
 //
 //
 //    }
+
+    @Test
+    @Disabled
+    void createBoard() {
+        // when
+        Long userId = 1L; // 사용자 ID
+        User user = new User(userId, "testuser", 25, Gender.MALE, 1234L, null);
+
+        String content = "Test boardList content";
+        List<MultipartFile> images = new ArrayList<>(); // 이미지 목록 생성
+        List<Long> foodIds = Arrays.asList(1L, 2L, 3L); // 음식 ID 목록 생성
+        Food food = foodRepository.findById(1L).get();
+
+        Board board = Board.builder()
+                .content(content)
+                .date(LocalDateTime.now())
+                .user(user)
+                .build();
+
+        BoardImage boardImage = BoardImage.builder()
+                .board(board)
+                .build();
+
+        BoardFood boardFood = BoardFood.builder()
+                .board(board)
+                .food(food)
+                .build();
+
+
+        when(boardRepository.findById(userId)).thenReturn(Optional.of(board));
+        when(boardImageRepository.findById(board.getId())).thenReturn(Optional.of(boardImage));
+        when(boardFoodRepository.findById(board.getId())).thenReturn(Optional.of(boardFood));
+
+        assertDoesNotThrow(() -> boardService.createBoard(content, images, foodIds, userId));
+
+
+
+
+
+
+
+    }
+>>>>>>> f74d15658dbc6813fb02f324da954a6c874c2b38
 
     @Test
     void updateBoard() {
