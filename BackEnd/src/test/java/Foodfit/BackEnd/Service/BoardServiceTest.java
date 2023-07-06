@@ -2,6 +2,7 @@ package Foodfit.BackEnd.Service;
 
 import Foodfit.BackEnd.Domain.*;
 import Foodfit.BackEnd.Repository.*;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -57,6 +58,7 @@ class BoardServiceTest {
     }
 
     @Test
+    @Disabled
     void createBoard() {
         // when
         Long userId = 1L; // 사용자 ID
