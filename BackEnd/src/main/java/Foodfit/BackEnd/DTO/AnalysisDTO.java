@@ -14,4 +14,8 @@ public record AnalysisDTO(
         this(2000, 50.0, 70.0, 5.0,
                 totalCalorie, totalProtein, totalFat, totalSalt);
     }
+    public AnalysisDTO(TotalNutrient totalNutrient) {
+        this(2000, 50.0, 70.0, 5.0,
+                totalNutrient.totalCalorie(), totalNutrient.totalProtein(), totalNutrient.totalFat(), totalNutrient.totalSalt());
+    }
 }
