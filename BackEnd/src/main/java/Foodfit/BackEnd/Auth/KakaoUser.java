@@ -1,6 +1,7 @@
 package Foodfit.BackEnd.Auth;
 
 import Foodfit.BackEnd.Domain.User;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
@@ -47,10 +48,18 @@ public class KakaoUser implements OAuth2UserWrapper {
     public User toUser() {
         Object profileImageUrlObject = attributesProfile.get("profile_image_url");
         byte[] profileImageUrls = null;
+
+        byte[] defaultImage = null;
+        try{
+            defaultImage = new ClassPathResource("defaultProfileImage.png").getContentAsByteArray();
+        }catch (Exception e){
+        }
+
+
         if (profileImageUrlObject != null) {
             profileImageUrls = profileImageUrlObject.toString().getBytes() != null ?
                     profileImageUrlObject.toString().getBytes() :
-                    "http://k.kakaocdn.net/dn/dpk9l1/btqmGhA2lKL/Oz0wDuJn1YV2DIn92f6DVK/img_640x640.jpg".getBytes();
+                    defaultImage;
         }
         return User.builder()
                 .name(getName())
