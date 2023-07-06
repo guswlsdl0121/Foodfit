@@ -25,7 +25,7 @@ public class BoardListService {
      * author: guswls
      * description: boardList를 반환하는 메서드
      */
-    public List<BoardDTO> getBoardList(Long userId) {
+    public List<BoardDTO>  getBoardList(Long userId) {
         List<Board> boards = boardRepository.findAll();
         return convertToDtoList(boards, userId);
     }
