@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
@@ -69,6 +70,16 @@ public class UserController {
 
         return new ResponseEntity(HttpStatus.OK);
     }
+
+    @PutMapping("/user/image")
+    @LoginCheck
+    public ResponseEntity updateUser( @RequestParam(required = false) MultipartFile image,
+                                      HttpServletRequest req) throws Exception {
+        final UserDTO userDTO = (UserDTO) req.getAttribute("user");
+        userService.updateProfileImage(userDTO.getId(), image);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
 
     private Gender getGenderFromRequest(UpdateUserRequest reqBody) {
         Gender gender = null;
