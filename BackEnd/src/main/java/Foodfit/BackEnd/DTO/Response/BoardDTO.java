@@ -9,6 +9,7 @@ import java.util.Base64;
 import java.util.List;
 
 public record BoardDTO(
+        Long id,
         byte[] profileImage,
         String author,
         String description,
@@ -20,6 +21,7 @@ public record BoardDTO(
 ) {
     public static BoardDTO toDTO(Board board, boolean isLikedByUser, List<String> tags){
         return new BoardDTO(
+                board.getId(),
                 board.getAuthorProfileImage(),
                 board.getAuthorName(),
                 board.getContent(),
