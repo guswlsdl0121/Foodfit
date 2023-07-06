@@ -87,16 +87,18 @@ public class AnalysisService {
         List<UserFood> userFoods = userFoodRepository.findByUserAndDateBetweenOrderByDateAsc(user, startDate.atStartOfDay(), endDate.atTime(LocalTime.MAX));
 
         // 날짜 범위 내에서 날짜를 생성하여 기본값인 0으로 초기화
-        Map<LocalDate, Double> nutrientMap = new HashMap<>();
-        for (LocalDate date = startDate; date.isBefore(endDate.plusDays(1)); date = date.plusDays(1)) {
-            nutrientMap.put(date, 0.0);
-        }
+        Map<LocalDate, Double> nutrientMap = new TreeMap<>();
 
         // 조회된 데이터를 기반으로 실제 데이터 계산
         for (UserFood userFood : userFoods) {
             LocalDate date = userFood.getDate().toLocalDate();
             double nutrientAmount = getDayAmount(userFood, nutrient);
-            nutrientMap.put(date, nutrientMap.get(date) + nutrientAmount);
+            nutrientMap.put(date, nutrientMap.getOrDefault(date, 0.0) + nutrientAmount);
+        }
+
+        // 날짜 범위 내에 존재하지 않는 날짜를 0으로 채움
+        for (LocalDate date = startDate; date.isBefore(endDate.plusDays(1)); date = date.plusDays(1)) {
+            nutrientMap.putIfAbsent(date, 0.0);
         }
 
         // 결과를 PeriodAnalysisDTO 리스트로 변환
