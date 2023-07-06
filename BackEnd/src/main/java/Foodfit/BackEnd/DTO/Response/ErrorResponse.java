@@ -14,6 +14,6 @@ public class ErrorResponse{
     public ErrorResponse(Exception e) {
         timeStamp = LocalDate.now();
         this.message = e.getMessage();
-        this.message = Arrays.toString(e.getCause().getStackTrace());
+        this.detail = Arrays.toString(e.getCause().getStackTrace());
     }
 }
