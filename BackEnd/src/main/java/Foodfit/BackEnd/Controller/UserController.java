@@ -71,6 +71,7 @@ public class UserController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    @Operation(description = "프로필 이미지 변경 URL입니다. \n")
     @PutMapping("/user/image")
     @LoginCheck
     public ResponseEntity updateUser( @RequestParam(required = false) MultipartFile image,
