@@ -15,23 +15,24 @@ import static Foodfit.BackEnd.Exception.NotFoundException.*;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(EnglishSearchException.class)
-    public ResponseEntity<ErrorResponse> handleEnglishSearchException(EnglishSearchException ex) {
-        return new ResponseEntity<>(new ErrorResponse(ex.getMessage()), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ErrorResponse> handleEnglishSearchException(EnglishSearchException e) {
+        return new ResponseEntity<>(new ErrorResponse(e), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({NoFoodException.class, NoUserException.class})
-    public ResponseEntity<ErrorResponse> handleNotFoundExceptions(RuntimeException ex) {
-        return new ResponseEntity<>(new ErrorResponse(ex.getMessage()), HttpStatus.NOT_FOUND);
+    public ResponseEntity<ErrorResponse> handleNotFoundExceptions(RuntimeException e) {
+        return new ResponseEntity<>(new ErrorResponse(e), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(NoSuchElementException.class)
-    public ResponseEntity<ErrorResponse> handleNoSuchElementException(NoSuchElementException e) {
-        return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.FORBIDDEN);
-    }
 
     @ExceptionHandler(value = {IllegalArgumentException.class, NoSuchElementException.class})
     public ResponseEntity<ErrorResponse> illegalValue(Exception e){
-        return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new ErrorResponse(e), HttpStatus.BAD_REQUEST);
     }
 
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> defaultException(Exception e){
+        return new ResponseEntity<>(new ErrorResponse(e), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
