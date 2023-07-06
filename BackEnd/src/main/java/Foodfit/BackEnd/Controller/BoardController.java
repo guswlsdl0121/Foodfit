@@ -1,12 +1,13 @@
 package Foodfit.BackEnd.Controller;
 
 import Foodfit.BackEnd.Aop.Annotations.LoginCheck;
+import Foodfit.BackEnd.DTO.Request.AddBoardDTO;
 import Foodfit.BackEnd.DTO.Request.DeleteBoardRequest;
+import Foodfit.BackEnd.DTO.Request.UpdateBoardRequest;
 import Foodfit.BackEnd.DTO.Request.UserLikeRequest;
 import Foodfit.BackEnd.DTO.UserDTO;
 import Foodfit.BackEnd.Service.BoardLikeService;
 import Foodfit.BackEnd.Service.BoardService;
-import io.jsonwebtoken.lang.Collections;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,7 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.List;
 
 
@@ -34,37 +35,29 @@ public class BoardController {
             "내용, 이미지, 태그를 보내주어야 합니다.")
     @PostMapping
     @LoginCheck
-    public ResponseEntity<Void> createBoard(@RequestParam String content,
-                                            @RequestParam(value = "images", required = false) MultipartFile[] images,
-                                            @RequestParam(required = false) Long[] tags,
-                                            HttpServletRequest request) throws Exception {
+    public ResponseEntity<Void> createBoard(@ModelAttribute AddBoardDTO addBoardDTO, HttpServletRequest request) throws IOException {
         Long userId = ((UserDTO) request.getAttribute("user")).getId();
+        String content = addBoardDTO.getContent();
+        List<MultipartFile> images = addBoardDTO.toImageList();
+        List<Long> foodIds = addBoardDTO.toFoodIdList();
 
-        List<MultipartFile> imageList = Collections.arrayToList(images);
-        List<Long> foodIds = Collections.arrayToList(tags);
-
-        boardService.createBoard(content, imageList, foodIds, userId);
+        boardService.createBoard(content, images, foodIds, userId);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
-
-    private List<MultipartFile> toImageList(List<MultipartFile> images){return new ArrayList<>(new ArrayList<>(images));
     }
 
     @Operation(summary = "게시글 수정", description="로그인이 되어 있어야 합니다.\n" +
             "게시글 Id, 내용, 이미지, 태그를 보내주어야 합니다.")
     @PutMapping
     @LoginCheck
-    public ResponseEntity<Void> updateBoard(@RequestParam Long boardId,
-                                            @RequestParam String content,
-                                            @RequestParam(value = "images", required = false) MultipartFile[] images,
-                                            @RequestParam(required = false) Long[] tags,
-                                            HttpServletRequest request) throws Exception {
-        Long userId = ((UserDTO) request.getAttribute("user")).getId();;
-        List<MultipartFile> imageList =  Collections.arrayToList(images);
-        List<Long> foodIds = Collections.arrayToList(tags);
+    public ResponseEntity<Void> updateBoard(@ModelAttribute UpdateBoardRequest reqBody, HttpServletRequest request) throws IOException {
+        Long userId = ((UserDTO) request.getAttribute("user")).getId();
+        Long boardId = reqBody.getBoardId();
+        String content = reqBody.getContent();
+        List<MultipartFile> images = reqBody.toImageList();
+        List<Long> foodIds = reqBody.toFoodIdList();
 
-        boardService.updateBoard(boardId, content, imageList, foodIds, userId);
+        boardService.updateBoard(boardId, content, images, foodIds, userId);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
