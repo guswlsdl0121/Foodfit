@@ -64,6 +64,9 @@ public class User {
         this.gender = gender;
     }
 
+    public void setProfileImage(byte[] profileImage) {
+        this.profileImage = profileImage;
+    }
 
     public Boolean isAdditionalDataNeed(){
         return ((age == '0') || (gender == null));

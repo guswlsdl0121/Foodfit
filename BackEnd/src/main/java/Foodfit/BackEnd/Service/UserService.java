@@ -4,9 +4,13 @@ import Foodfit.BackEnd.DTO.UserUpdateDTO;
 import Foodfit.BackEnd.Domain.User;
 import Foodfit.BackEnd.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.NoSuchElementException;
 
 @Service
@@ -23,4 +27,14 @@ public class UserService {
         findUser.setGender(dto.getGender());
         findUser.setAge(dto.getAge());
     }
+
+    public void updateProfileImage(Long id, MultipartFile image) throws Exception {
+        User findUser = userRepository.findById(id).orElseThrow(() -> new NoSuchElementException("유저를 찾을 수 없습니다."));
+
+        byte [] byteImage = new ClassPathResource("defaultProfileImage.png").getContentAsByteArray();
+        if(!image.isEmpty()) byteImage = image.getBytes();
+        findUser.setProfileImage(byteImage);
+
+    }
+
 }
