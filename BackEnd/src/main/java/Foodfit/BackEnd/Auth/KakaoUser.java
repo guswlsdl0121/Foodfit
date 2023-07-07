@@ -55,7 +55,7 @@ public class KakaoUser implements OAuth2UserWrapper {
         }catch (Exception e){
         }
 
-        profileImageUrls = profileImageUrlObject.toString().getBytes() != null ?
+        profileImageUrls = profileImageUrlObject != null ?
                 profileImageUrlObject.toString().getBytes() :
                 defaultImage;
 
