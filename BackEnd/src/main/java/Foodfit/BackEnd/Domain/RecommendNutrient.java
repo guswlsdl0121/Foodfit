@@ -6,28 +6,32 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "recommend_nutrient")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RecommendNutrient {
 
+    public RecommendNutrient(String nutrientType, Gender gender, Integer startAge, Integer endAge, Double nutrientValue) {
+        this.nutrientType = nutrientType;
+        this.gender = gender;
+        this.startAge = startAge;
+        this.endAge = endAge;
+        this.nutrientValue = nutrientValue;
+    }
+
     @Id
-    @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "nutrient_type")
+
     private String nutrientType;
 
-    @Column(name = "gender")
+
+    @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @Column(name = "start_age")
     private Integer startAge;
 
-    @Column(name = "end_age")
     private Integer endAge;
 
-    @Column(name = "value")
-    private Double value;
+    private Double nutrientValue;
 }
