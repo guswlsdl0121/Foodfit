@@ -8,5 +8,5 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface UserFoodRepository extends JpaRepository<UserFood, Long> {
-    List<UserFood> findByUserAndDateBetween(User user, LocalDateTime startDate, LocalDateTime endDate);
+    List<UserFood> findByUserAndDateBetweenOrderByDateAsc(User user, LocalDateTime startDate, LocalDateTime endDate);
 }

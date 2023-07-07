@@ -61,11 +61,6 @@ public class BoardListService {
 
         TotalNutrient totalNutrient = board.calculateTotalNutrients();
 
-        int totalCalorie = totalNutrient.totalCalorie();
-        double totalProtein = totalNutrient.totalProtein();
-        double totalFat = totalNutrient.totalFat();
-        double totalSalt = totalNutrient.totalSalt();
-
-        return new AnalysisDTO(totalCalorie, totalProtein, totalFat, totalSalt);
+        return new AnalysisDTO(totalNutrient);
     }
 }

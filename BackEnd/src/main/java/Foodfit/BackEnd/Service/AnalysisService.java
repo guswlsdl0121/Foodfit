@@ -3,15 +3,15 @@ package Foodfit.BackEnd.Service;
 import Foodfit.BackEnd.DTO.AnalysisDTO;
 import Foodfit.BackEnd.DTO.PeriodAnalysisDTO;
 import Foodfit.BackEnd.DTO.UserDTO;
-import Foodfit.BackEnd.Domain.Food;
-import Foodfit.BackEnd.Domain.User;
-import Foodfit.BackEnd.Domain.UserFood;
+import Foodfit.BackEnd.Domain.*;
 
 import Foodfit.BackEnd.Exception.NotFoundException.NoUserException;
 import Foodfit.BackEnd.Exception.NotFoundException.NoFoodException;
+import Foodfit.BackEnd.Repository.RecommendNutrientRepository;
 import Foodfit.BackEnd.Repository.UserFoodRepository;
 import Foodfit.BackEnd.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,10 +24,12 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class AnalysisService {
     private final UserFoodRepository userFoodRepository;
     private final UserRepository userRepository;
     private final DatabaseLogger databaseLogger;
+    private final RecommendNutrientRepository recommendNutrientRepository;
 
     /**
      * methodName : getDailyAnalysis
@@ -44,16 +46,21 @@ public class AnalysisService {
 
             User user = userRepository.findById(userDTO.getId()).orElseThrow(NoUserException::new);
 
-            List<UserFood> userFoods = userFoodRepository.findByUserAndDateBetween(user, todayStart, todayEnd);
+            Gender gender = user.getGender();
+            int age = user.getAge();
 
-            return calculateDailyAnalysis(userFoods);
+            List<RecommendNutrient> recommendNutrient = recommendNutrientRepository.findRecommendNutrient(age, gender);
+
+            List<UserFood> userFoods = userFoodRepository.findByUserAndDateBetweenOrderByDateAsc(user, todayStart, todayEnd);
+
+            return calculateDailyAnalysis(userFoods, recommendNutrient);
         } catch(NoUserException | NoFoodException e){
             databaseLogger.saveLog(e);
             return null;
         }
     }
 
-    private AnalysisDTO calculateDailyAnalysis(List<UserFood> userFoods) {
+    private AnalysisDTO calculateDailyAnalysis(List<UserFood> userFoods, List<RecommendNutrient> recommendNutrient) {
         int totalCalorie = 0;
         double totalProtein = 0.0;
         double totalFat = 0.0;
@@ -71,7 +78,7 @@ public class AnalysisService {
             totalSalt += Math.round(food.getSalt() * weightRatio);
         }
 
-        return new AnalysisDTO(totalCalorie, totalProtein, totalFat, totalSalt);
+        return new AnalysisDTO(recommendNutrient, totalCalorie, totalProtein, totalFat, totalSalt);
     }
 
     /**
@@ -84,17 +91,25 @@ public class AnalysisService {
     public List<PeriodAnalysisDTO> getPeriodAnalysis(UserDTO userDTO, LocalDate startDate, LocalDate endDate, String nutrient) {
         User user = userRepository.findById(userDTO.getId())
                 .orElseThrow(() -> new NoSuchElementException("사용자를 찾을 수 없습니다."));
-        List<UserFood> userFoods = userFoodRepository.findByUserAndDateBetween(user, startDate.atStartOfDay(), endDate.atTime(LocalTime.MAX));
-        Map<LocalDate, Double> nutrientMap = new HashMap<>();
+        List<UserFood> userFoods = userFoodRepository.findByUserAndDateBetweenOrderByDateAsc(user, startDate.atStartOfDay(), endDate.atTime(LocalTime.MAX));
 
+        // 날짜 범위 내에서 날짜를 생성하여 기본값인 0으로 초기화
+        Map<LocalDate, Double> nutrientMap = new TreeMap<>();
+
+        // 조회된 데이터를 기반으로 실제 데이터 계산
         for (UserFood userFood : userFoods) {
             LocalDate date = userFood.getDate().toLocalDate();
             double nutrientAmount = getDayAmount(userFood, nutrient);
             nutrientMap.put(date, nutrientMap.getOrDefault(date, 0.0) + nutrientAmount);
         }
 
-        List<PeriodAnalysisDTO> nutrientList = new ArrayList<>();
+        // 날짜 범위 내에 존재하지 않는 날짜를 0으로 채움
+        for (LocalDate date = startDate; date.isBefore(endDate.plusDays(1)); date = date.plusDays(1)) {
+            nutrientMap.putIfAbsent(date, 0.0);
+        }
 
+        // 결과를 PeriodAnalysisDTO 리스트로 변환
+        List<PeriodAnalysisDTO> nutrientList = new ArrayList<>();
         for (Map.Entry<LocalDate, Double> entry : nutrientMap.entrySet()) {
             LocalDate date = entry.getKey();
             Double nutrientAmount = entry.getValue();
@@ -104,6 +119,7 @@ public class AnalysisService {
 
         return nutrientList;
     }
+
 
     /**
      * methodName : getDayAmount
