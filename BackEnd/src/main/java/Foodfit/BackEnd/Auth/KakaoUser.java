@@ -46,18 +46,12 @@ public class KakaoUser implements OAuth2UserWrapper {
     //이미지 URL 관련 NULL처리
     @Override
     public User toUser() {
-        Object profileImageUrlObject = attributesProfile.get("profile_image_url");
+        //Object profileImageUrlObject = attributesProfile.get("profile_image_url");
         byte[] profileImageUrls = null;
-
-        byte[] defaultImage = null;
         try{
-            defaultImage = new ClassPathResource("defaultProfileImage.png").getContentAsByteArray();
+            profileImageUrls = new ClassPathResource("defaultProfileImage.png").getContentAsByteArray();
         }catch (Exception e){
         }
-
-        profileImageUrls = profileImageUrlObject.toString().getBytes() != null ?
-                profileImageUrlObject.toString().getBytes() :
-                defaultImage;
 
         return User.builder()
                 .name(getName())
