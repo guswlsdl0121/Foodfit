@@ -14,11 +14,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+
+import static Foodfit.BackEnd.DTO.UserDTO.byteToUrl;
+
 
 @RestController
 @RequestMapping("/api")
@@ -39,7 +43,7 @@ public class UserController {
                 .name(userDTO.getName())
                 .age(userDTO.getAge())
                 .gender(userDTO.getGender())
-                .profileImage(userDTO.getProfileImage())
+                .profileImage(byteToUrl(userDTO.getProfileImage()))
                 .build();
 
     }
@@ -72,10 +76,9 @@ public class UserController {
     }
 
     @Operation(description = "프로필 이미지 변경 URL입니다. \n")
-    @PutMapping("/user/image")
+    @PutMapping(value = "/user/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @LoginCheck
-    public ResponseEntity updateUser( @RequestParam(required = false) MultipartFile image,
-                                      HttpServletRequest req) throws Exception {
+    public ResponseEntity updateUser( @RequestParam(required = false) MultipartFile image, HttpServletRequest req) throws Exception {
         final UserDTO userDTO = (UserDTO) req.getAttribute("user");
         userService.updateProfileImage(userDTO.getId(), image);
         return new ResponseEntity(HttpStatus.OK);

@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,7 +33,7 @@ public class BoardController {
 
     @Operation(summary = "게시글 작성", description="로그인이 되어 있어야 합니다.\n" +
             "내용, 이미지, 태그를 보내주어야 합니다.")
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @LoginCheck
     public ResponseEntity<Void> createBoard(@RequestParam String content,
                                             @RequestParam(value = "images", required = false) MultipartFile[] images,
@@ -53,7 +54,7 @@ public class BoardController {
 
     @Operation(summary = "게시글 수정", description="로그인이 되어 있어야 합니다.\n" +
             "게시글 Id, 내용, 이미지, 태그를 보내주어야 합니다.")
-    @PutMapping
+    @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @LoginCheck
     public ResponseEntity<Void> updateBoard(@RequestParam Long boardId,
                                             @RequestParam String content,
@@ -73,10 +74,10 @@ public class BoardController {
             "게시글 Id를 보내주어야 합니다.")
     @DeleteMapping
     @LoginCheck
-    public ResponseEntity<Void> deleteBoard(@RequestBody DeleteBoardRequest reqBody, HttpServletRequest request) {
+    public ResponseEntity<Void> deleteBoard(@RequestParam(value="boardId") Long boardId, HttpServletRequest request) {
         Long userId = ((UserDTO) request.getAttribute("user")).getId();
 
-        boardService.deleteBoard(reqBody.getBoardId(), userId);
+        boardService.deleteBoard(boardId, userId);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

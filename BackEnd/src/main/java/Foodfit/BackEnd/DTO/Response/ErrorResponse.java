@@ -15,7 +15,7 @@ public class ErrorResponse{
         timeStamp = LocalDate.now();
         this.message = e.getMessage();
 
-        if(e.getCause().getStackTrace() == null){
+        if(e.getCause() ==null || e.getCause().getStackTrace() == null){
             this.detail = null;
             return;
         }

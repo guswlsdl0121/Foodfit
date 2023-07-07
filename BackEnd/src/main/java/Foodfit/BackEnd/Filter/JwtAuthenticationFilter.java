@@ -72,7 +72,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 .id(user.getId())
                 .name(user.getName())
                 .age(user.getAge())
-                .profileImage(user.getProfileImage())
+                .profileImage(user.getProfileImage().getBytes())
                 .gender(user.getGender())
                 .build();
 

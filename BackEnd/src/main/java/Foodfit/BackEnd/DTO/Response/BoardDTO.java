@@ -40,7 +40,6 @@ public record BoardDTO(
             String base64Encode = Base64.getEncoder().encodeToString(image);
             base64Encode = "data:image/png;base64," + base64Encode;
             urls.add(base64Encode);
-
         }
         return urls;
     }
