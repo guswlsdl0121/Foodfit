@@ -31,7 +31,7 @@ public class GlobalExceptionHandler {
     }
 
 
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler(value = Exception.class)
     public ResponseEntity<ErrorResponse> defaultException(Exception e){
         return new ResponseEntity<>(new ErrorResponse(e), HttpStatus.INTERNAL_SERVER_ERROR);
     }
