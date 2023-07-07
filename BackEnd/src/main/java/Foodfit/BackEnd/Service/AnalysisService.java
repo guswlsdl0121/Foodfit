@@ -3,15 +3,15 @@ package Foodfit.BackEnd.Service;
 import Foodfit.BackEnd.DTO.AnalysisDTO;
 import Foodfit.BackEnd.DTO.PeriodAnalysisDTO;
 import Foodfit.BackEnd.DTO.UserDTO;
-import Foodfit.BackEnd.Domain.Food;
-import Foodfit.BackEnd.Domain.User;
-import Foodfit.BackEnd.Domain.UserFood;
+import Foodfit.BackEnd.Domain.*;
 
 import Foodfit.BackEnd.Exception.NotFoundException.NoUserException;
 import Foodfit.BackEnd.Exception.NotFoundException.NoFoodException;
+import Foodfit.BackEnd.Repository.RecommendNutrientRepository;
 import Foodfit.BackEnd.Repository.UserFoodRepository;
 import Foodfit.BackEnd.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,10 +24,12 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class AnalysisService {
     private final UserFoodRepository userFoodRepository;
     private final UserRepository userRepository;
     private final DatabaseLogger databaseLogger;
+    private final RecommendNutrientRepository recommendNutrientRepository;
 
     /**
      * methodName : getDailyAnalysis
@@ -44,16 +46,21 @@ public class AnalysisService {
 
             User user = userRepository.findById(userDTO.getId()).orElseThrow(NoUserException::new);
 
+            Gender gender = user.getGender();
+            int age = user.getAge();
+
+            List<RecommendNutrient> recommendNutrient = recommendNutrientRepository.findRecommendNutrient(age, gender);
+
             List<UserFood> userFoods = userFoodRepository.findByUserAndDateBetweenOrderByDateAsc(user, todayStart, todayEnd);
 
-            return calculateDailyAnalysis(userFoods);
+            return calculateDailyAnalysis(userFoods, recommendNutrient);
         } catch(NoUserException | NoFoodException e){
             databaseLogger.saveLog(e);
             return null;
         }
     }
 
-    private AnalysisDTO calculateDailyAnalysis(List<UserFood> userFoods) {
+    private AnalysisDTO calculateDailyAnalysis(List<UserFood> userFoods, List<RecommendNutrient> recommendNutrient) {
         int totalCalorie = 0;
         double totalProtein = 0.0;
         double totalFat = 0.0;
@@ -71,7 +78,7 @@ public class AnalysisService {
             totalSalt += Math.round(food.getSalt() * weightRatio);
         }
 
-        return new AnalysisDTO(totalCalorie, totalProtein, totalFat, totalSalt);
+        return new AnalysisDTO(recommendNutrient, totalCalorie, totalProtein, totalFat, totalSalt);
     }
 
     /**
