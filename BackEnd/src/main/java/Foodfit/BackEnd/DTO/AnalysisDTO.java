@@ -19,8 +19,8 @@ public record AnalysisDTO(
         this(
                 recommendNutrient.get(0).getNutrientValue().intValue(),
                 recommendNutrient.get(1).getNutrientValue().intValue(),
-                recommendNutrient.get(2).getNutrientValue().intValue(),
                 recommendNutrient.get(3).getNutrientValue().intValue(),
+                recommendNutrient.get(2).getNutrientValue(),
                 totalCalorie, totalProtein, totalFat, totalSalt);
     }
     public AnalysisDTO(TotalNutrient totalNutrient) {
